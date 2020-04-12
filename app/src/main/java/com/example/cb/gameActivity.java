@@ -8,12 +8,20 @@ import android.os.TestLooperManager;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class gameActivity extends AppCompatActivity {
@@ -22,6 +30,13 @@ public class gameActivity extends AppCompatActivity {
     TextView errbox;
     int culty;
     String emptyString = "No input found";
+    String goal = "";
+    ListView listBox;
+    List<String> List_file;
+    ArrayAdapter<String> listAdapter;
+    int count = 0;
+
+
 
 
     @Override
@@ -34,28 +49,11 @@ public class gameActivity extends AppCompatActivity {
         Button diffDone = (Button) findViewById(R.id.diffDone);
         Button guessDone = (Button) findViewById(R.id.wordBtn);
 
-        /* MDCHG
-        final int diff = Integer.parseInt(diffbox.getText().toString());
-        String word = "";
-        for(int i = 0; i < diff;){
-            int r = random.nextInt(26) + 97;
-            String r1 = String.valueOf((char)r);
-            if(word.contains(r1)){
-                continue;
-            } else {
-                word += r1;
-                i++;
-            }
-        }
-        final String word1 = word;
-        errbox.setText(word1);
 
-        if(getIntent().hasExtra("com.mailronav.cb.ANYTHING")){
-            random = new Random();
-            String r = "";
+        List_file = new ArrayList<String>();
+        listBox = (ListView)findViewById(R.id.histBox);
+        CreateListView();
 
-        }
-         */
         diffDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,19 +61,20 @@ public class gameActivity extends AppCompatActivity {
                 String inputstr = diffbox.getText().toString();
                 try {
                     int culty = Integer.parseInt(inputstr);
-                    String word = "";
 
                     for (int i = 0; i < culty;) {
                         int r = myrand.nextInt(26) + 65;
                         String r1 = String.valueOf((char) r);
-                        if (word.contains(r1)) {
+                        if (goal.contains(r1)) {
                             continue;
                         } else {
-                            word += r1;
+                            goal += r1;
                             i++;
                         }
                     }
-                    errbox.setText(word);
+                    errbox.setText(goal);
+                    diffbox.setText("");
+                    diffbox.setHint("enter a word");
 
                 } catch (NumberFormatException e){
                     errbox.setText(e.toString());
@@ -86,46 +85,47 @@ public class gameActivity extends AppCompatActivity {
         guessDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int count = 0;
                 String guess = null;
-                if (count == 0) {
-                    // diffbox.setHint("enter a word");
-                    guess = String.valueOf(diffbox.getText());
-                    if (guess.isEmpty()) {
-                        errbox.setText(emptyString);
+
+                guess = String.valueOf(diffbox.getText());
+                if (guess.isEmpty()) {
+                    errbox.setText(emptyString);
+                } else {
+                    guess = guess.toUpperCase();
+
+                    // Verify guess is of the same length
+                    if (guess.length() != goal.length()){
+                        errbox.setText("Wrong number of letters. Please enter a word with " + culty + " letters");
                     } else {
-                        errbox.setText(guess);
-                    }
-                    /*
-                    while(guess.length() != word1.length()){
-                        errbox.setText("Wrong number of letters. Please enter a word with " + diff + " letters");
-                        int diff1 = Integer.parseInt(diffbox.getText().toString());
-                    }
-                    */
-                    /*int cows = 0;
-                    int bulls = 0;
-                    for(int i = 0; i < guess.length(); i++){
-                        if(guess.equals(word1)){
-                            count = word1.length();
-                            break;
-                        } else if((guess.charAt(i) == word1.charAt(i))){
-                            bulls += 1;
+                        count += 1;
+                        // Compare guess against target
+                        if (guess.equals(goal)) {
+                            errbox.setText("You are correct!");
+                            List_file.add(0, guess + ": Correct guess in: " + String.valueOf(count) + " guesses!");
+                            listAdapter.notifyDataSetChanged();
                         } else {
-                            for(int l = 0; l < word1.length(); l++){
-                                if(guess.charAt(i) == word1.charAt(l)){
+                            int cows = 0;
+                            int bulls = 0;
+                            for (int i = 0; i < guess.length(); i++) {
+                                int idx = goal.indexOf(guess.charAt(i));
+                                if (i == idx){
+                                    bulls += 1;
+                                } else if (idx != -1) {
                                     cows += 1;
+                                } else {
+                                    // Nothing to do
+                                    ;
                                 }
                             }
+                            errbox.setText("Your word has " + bulls + " bulls and " +
+                                "" + cows + " cows. Please guess again");
+                            String stringCow = String.valueOf(cows);
+                            String stringBull = String.valueOf(bulls);
+                            List_file.add(0, guess + ": " + stringCow + "C " + stringBull + "B: guess " + String.valueOf(count));
+                            listAdapter.notifyDataSetChanged();
+                            diffbox.setText("");
                         }
                     }
-                    if(count != word1.length()){
-                        errbox.setText("Your word has " + bulls + " bulls and " +
-                                "" + cows + " cows. Please guess again");
-                    } else {
-                        errbox.setText("You are correct!");
-                    }
-                    final int cows1 = cows;
-                    final int bulls1 = bulls;*/
                 }
             }
         });
@@ -136,6 +136,23 @@ public class gameActivity extends AppCompatActivity {
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startIntent.putExtra("com.mailronav.cb.THING", "");
                 startActivity(startIntent);
+            }
+        });
+
+    }
+
+    private void CreateListView() {
+        //List_file.add("Apple");
+        //Create an adapter for the listView and add the ArrayList to the adapter.
+
+        listAdapter = new ArrayAdapter<String>(gameActivity.this, android.R.layout.simple_list_item_1, List_file);
+        listBox.setAdapter(listAdapter);
+        listBox.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+            {
+                //args2 is the listViews Selected index
             }
         });
     }
