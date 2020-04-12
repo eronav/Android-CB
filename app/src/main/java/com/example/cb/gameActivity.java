@@ -114,6 +114,7 @@ public class gameActivity extends AppCompatActivity {
                                     cows += 1;
                                 } else {
                                     // Nothing to do
+                                    //hksjfdhkusdfhjker shjk
                                     ;
                                 }
                             }
