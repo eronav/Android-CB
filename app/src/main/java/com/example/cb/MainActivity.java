@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button directBtn = (Button) findViewById(R.id.direction);
         Button gameBtn = (Button) findViewById(R.id.game);
+        Button newGameBtn = (Button) findViewById(R.id.newGameBtn);
         directBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), gameActivity.class);
                 startIntent.putExtra("com.mailronav.cb.ANYTHING", "");
+                startActivity(startIntent);
+            }
+        });
+        newGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), game_2.class);
+                startIntent.putExtra("com.mailronav.cb.DUDE", "");
                 startActivity(startIntent);
             }
         });

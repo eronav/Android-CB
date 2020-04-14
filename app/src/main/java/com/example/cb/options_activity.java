@@ -1,13 +1,17 @@
 package com.example.cb;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
-public class secondGameActivity extends AppCompatActivity {
+public class options_activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second_game);
+        setContentView(R.layout.activity_options_activity);
+        if(getIntent().hasExtra("com.mailronav.cb.U")){
+
+        }
     }
 }

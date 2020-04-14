@@ -9,6 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".game_screen"></activity>
+        <activity android:name=".help_activity" />
+        <activity android:name=".options_activity" />
+        <activity android:name=".play_game_level" />
+        <activity android:name=".game_2" />
         <activity android:name=".gameActivity" />
         <activity android:name=".directActivity" />
         <activity android:name=".MainActivity">
@@ -18,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
