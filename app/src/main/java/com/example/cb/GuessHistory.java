@@ -49,10 +49,11 @@ public class GuessHistory {
         });
     }
 
-    public void AddEntry(WordGenerator wgen, String guess) {
+    public boolean AddEntry(WordGenerator wgen, String guess) {
         String errmsg;
         int[] result = wgen.evaluateGuess(guess);
         int attempts = List_file.size() + 1;
+        boolean game_status = false;
 
         // ((game_screen)appcontext).setDebugBox(sz_a + "." + sz_b + "." + sz_c);
         if (result[0] == 0) {
@@ -65,10 +66,12 @@ public class GuessHistory {
             List_file.add(0, guess + ": " + stringCow + "C " + stringBull + "B: guess " + String.valueOf(attempts));
         } else if (result[0] == 1) {
             List_file.add(0, guess + ": Correct guess in: " + String.valueOf(attempts) + " guesses!");
+            game_status = true;
         } else {
             errmsg = ("Incompatible guess");
         }
 
         listAdapter.notifyDataSetChanged();
+        return game_status;
     }
 }

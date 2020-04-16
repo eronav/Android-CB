@@ -1,5 +1,6 @@
 package com.example.cb;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,11 +63,16 @@ public class game_screen extends AppCompatActivity {
 
         done_btn.setOnClickListener(new View.OnClickListener() {
             String guess = "";
-
+            boolean check_game;
             @Override
             public void onClick(View v) {
                 guess = String.valueOf(guess_box.getText());
-                ghist.AddEntry(wgen, guess);
+                check_game = ghist.AddEntry(wgen, guess);
+                if (check_game) {
+                    Intent startIntent = new Intent(getApplicationContext(), play_again.class);
+                    startIntent.putExtra("com.mailromav.cb.one", "");
+                    startActivity(startIntent);
+                }
             }
         });
         testing_dash.setText(word);

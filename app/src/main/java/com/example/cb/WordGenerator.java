@@ -50,6 +50,7 @@ public class WordGenerator {
             if (guess.equals(goal)) {
                 errmsg = ("You are correct!");
                 result[0] = 1;
+
             } else {
                 int cows = 0;
                 int bulls = 0;

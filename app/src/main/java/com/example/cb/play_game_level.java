@@ -1,12 +1,12 @@
 package com.example.cb;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class play_game_level extends AppCompatActivity {
 
@@ -20,6 +20,9 @@ public class play_game_level extends AppCompatActivity {
         Button btn5 = (Button) findViewById(R.id.button5);
         Button btn6 = (Button) findViewById(R.id.button6);
         if(getIntent().hasExtra("com.mailronav.cb.YOU")){
+
+        }
+        if(getIntent().hasExtra("com.mailronav.cb.again")){
 
         }
         back_btn.setOnClickListener(new View.OnClickListener() {

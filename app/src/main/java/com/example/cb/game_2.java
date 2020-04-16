@@ -1,11 +1,11 @@
 package com.example.cb;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class game_2 extends AppCompatActivity {
 
@@ -20,6 +20,15 @@ public class game_2 extends AppCompatActivity {
 
         }
         if(getIntent().hasExtra("com.mailronav.cb.B")){
+
+        }
+        if(getIntent().hasExtra("com.mailronav.cb.quit")){
+
+        }
+        if(getIntent().hasExtra("com.mailronav.cb.option")){
+
+        }
+        if(getIntent().hasExtra("com.mailronav.cb.help")){
 
         }
         play_btn.setOnClickListener(new View.OnClickListener() {

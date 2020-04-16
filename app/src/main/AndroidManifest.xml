@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".game_screen"></activity>
+        <activity android:name=".play_again"></activity>
+        <activity android:name=".game_screen" />
         <activity android:name=".help_activity" />
         <activity android:name=".options_activity" />
         <activity android:name=".play_game_level" />
