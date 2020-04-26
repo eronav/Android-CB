@@ -14,17 +14,13 @@
         <activity android:name=".help_activity" />
         <activity android:name=".options_activity" />
         <activity android:name=".play_game_level" />
-        <activity android:name=".game_2" />
-        <activity android:name=".gameActivity" />
-        <activity android:name=".directActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".game_2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

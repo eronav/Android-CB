@@ -68,6 +68,7 @@ public class game_screen extends AppCompatActivity {
             public void onClick(View v) {
                 guess = String.valueOf(guess_box.getText());
                 check_game = ghist.AddEntry(wgen, guess);
+                guess_box.setText("");
                 if (check_game) {
                     Intent startIntent = new Intent(getApplicationContext(), play_again.class);
                     startIntent.putExtra("com.mailromav.cb.one", "");
