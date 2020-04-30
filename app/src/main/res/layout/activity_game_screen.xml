@@ -24,39 +24,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.949" />
 
-    <EditText
-        android:id="@+id/guess_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginLeft="62dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginRight="136dp"
-        android:ems="10"
-        android:hint="Enter a word"
-        android:inputType="textPersonName"
-        android:textColorHint="@color/hintColorGame"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/history" />
-
     <Button
         android:id="@+id/done_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginRight="62dp"
+        android:layout_marginTop="184dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
         android:text="Done"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guess_box"
         app:layout_constraintTop_toBottomOf="@+id/history" />
 
-    <ListView
+    <ScrollView
         android:id="@+id/history"
         android:layout_width="309dp"
         android:layout_height="189dp"
@@ -65,7 +44,36 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/guess_box"
+        android:layout_width="309dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginRight="51dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/history"></LinearLayout>
+
+    <EditText
+        android:id="@+id/dummy_input"
+        android:layout_width="30dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="290dp"
+        android:layout_marginLeft="290dp"
+        android:layout_marginTop="42dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/done_btn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
