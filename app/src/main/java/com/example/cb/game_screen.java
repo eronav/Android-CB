@@ -1,11 +1,13 @@
 package com.example.cb;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +37,12 @@ public class game_screen extends AppCompatActivity {
     LinearLayout cb;
     LinearLayout row;
     int i = 0;
-
+    int diff;
+    boolean keyboard_status;
+    String word;
+    LinearLayout quit_layout;
+    LinearLayout play_again_layout;
+    LinearLayout word_outer_layout;
 
 
 
@@ -48,6 +55,8 @@ public class game_screen extends AppCompatActivity {
         setContentView(R.layout.activity_game_screen);
 
         histbox = findViewById(R.id.history);
+        Button keyboard_btn = (Button) findViewById(R.id.keyboard);
+        keyboard_status = false;
         dummy_input = findViewById(R.id.dummy_input);
         myctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
@@ -60,6 +69,9 @@ public class game_screen extends AppCompatActivity {
         cb = new LinearLayout(myctxt);
         newrow = new LinearLayout(myctxt);
         row = new LinearLayout(myctxt);
+        play_again_layout = (LinearLayout) findViewById(R.id.play_again_layout);
+        quit_layout = (LinearLayout) findViewById(R.id.quit_layout);
+        word_outer_layout = new LinearLayout(myctxt);
 
         cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -72,7 +84,7 @@ public class game_screen extends AppCompatActivity {
 
         final boolean check_keyboard = false;
 
-        int diff;
+
         String dash = "";
         final int i = 0;
         if(getIntent().hasExtra("com.mailronav.cb.three")){
@@ -90,7 +102,7 @@ public class game_screen extends AppCompatActivity {
         testing_dash.setText(dash);*/
 
         wgen = new WordGenerator(diff);
-        String word = wgen.getWord();
+        word = wgen.getWord();
 
 
         ghist = new GuessHistory();
@@ -106,14 +118,58 @@ public class game_screen extends AppCompatActivity {
                 // histbox.removeAllViews();
                 histbox.addView(cb);
                 dummy_input.setText("");
-                if (check_game) {
-                    Intent startIntent = new Intent(getApplicationContext(), play_again.class);
-                    startIntent.putExtra("com.mailromav.cb.one", "");
-                    startActivity(startIntent);
+                if (ghist.check_game(wgen, guess, diff)) {
+                    Button play_again = new Button(myctxt);
+                    Button quit_btn = new Button(myctxt);
+                    play_again.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    quit_btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    ViewGroup.LayoutParams btn_layout = play_again.getLayoutParams();
+                    ViewGroup.LayoutParams btn1_layout = play_again.getLayoutParams();
+                    btn_layout.height = 50;
+                    btn_layout.width = 50;
+                    btn1_layout.height = 50;
+                    btn1_layout.width = 50;
+                    play_again.setText("Play Again");
+                    quit_btn.setText("Quit");
+
+                    play_again_layout.addView(play_again);
+                    quit_layout.addView(quit_btn);
+                    play_again.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
+                            startIntent.putExtra("com.mailronav.cb.playAgain", "");
+                            startActivity(startIntent);
+                        }
+                    });
+                    quit_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent startIntent = new Intent(getApplicationContext(), game_2.class);
+                            startIntent.putExtra("com.mailronav.cb.quit", "");
+                            startActivity(startIntent);
+                        }
+                    });
                 }*/
 
-                LinearLayout set_img = add_row();
-                row.addView(set_img);
+                LinearLayout set_img_eval = ghist.get_img_cb_eval(guess, wgen, myctxt, ltrmngr, diff);
+                // LinearLayout set_img_word = set_word_img(guess);
+                guess_box.removeAllViews();
+                row.addView(set_img_eval);
+                // row.addView(set_word_img1(guess));
+                dummy_input.setText("");
+
+            }
+        });
+
+        keyboard_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(keyboard_status == true) {
+                    hideKeyboardFrom(myctxt, dummy_input);
+                } else {
+                    openKeyboard();
+                }
             }
         });
 
@@ -137,19 +193,8 @@ public class game_screen extends AppCompatActivity {
                 String sequence = s.toString();
                 sequence.toLowerCase();
 
-                int[] letter_ids = ltrmngr.getLetter(sequence, id_array);
-                guess_box.removeAllViews();
-                for(int i = 0; i < sequence.length(); i++){
-                    ImageView letterView = new ImageView(myctxt);
-                    letterView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    ViewGroup.LayoutParams btn_layout = letterView.getLayoutParams();
-                    btn_layout.height = 50;
-                    btn_layout.width = 50;
-                    letterView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    letterView.setImageResource(letter_ids[i]);
-                    guess_box.addView(letterView);
-                    //newrow.addView(letterView);
-                }
+                guess_box = set_word_img(sequence);
+
                 /*TextView test_text = new TextView(myctxt);
                 test_text.setText("testing");
                 histbox.removeAllViews();
@@ -157,9 +202,6 @@ public class game_screen extends AppCompatActivity {
                 //histbox.addView(guess_box);
                 //histbox.addView(newrow);
                 guess = s.toString();
-
-
-
             }
 
             @Override
@@ -200,33 +242,110 @@ public class game_screen extends AppCompatActivity {
     }
 
     public LinearLayout add_row() {
-        LinearLayout innerrow = new LinearLayout(myctxt);
-        innerrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        innerrow.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout cow_img_layout = new LinearLayout(myctxt);
-        cow_img_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        cow_img_layout.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout bull_img_layout = new LinearLayout(myctxt);
-        bull_img_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        bull_img_layout.setOrientation(LinearLayout.HORIZONTAL);
+        ImageView cow = new ImageView(myctxt);
+        ImageView bull = new ImageView(myctxt);
+        ImageView cow1 = new ImageView(myctxt);
+        ImageView bull1 = new ImageView(myctxt);
+        ImageView cow2 = new ImageView(myctxt);
+        ImageView bull2 = new ImageView(myctxt);
 
-        row.setOrientation(LinearLayout.VERTICAL);
-        for(int num = 0; num < 3; num++) {
+        LinearLayout cows_layout = new LinearLayout(myctxt);
+        LinearLayout bulls_layout = new LinearLayout(myctxt);
+        LinearLayout final_layout = new LinearLayout(myctxt);
 
-            ImageView my_cow_img = get_cow_img();
-            ImageView my_bull_img = get_bull_img();
-            cow_img_layout.addView(my_cow_img);
-            bull_img_layout.addView(my_bull_img);
-        }
 
-        innerrow.addView(bull_img_layout);
-        innerrow.addView(cow_img_layout);
+        cow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        cow1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        cow2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        bull.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        bull1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        bull2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        return innerrow;
+        ViewGroup.LayoutParams cow_layout = cow.getLayoutParams();
+        ViewGroup.LayoutParams cow1_layout = cow1.getLayoutParams();
+        ViewGroup.LayoutParams cow2_layout = cow2.getLayoutParams();
+        ViewGroup.LayoutParams bull_layout = bull.getLayoutParams();
+        ViewGroup.LayoutParams bull1_layout = bull1.getLayoutParams();
+        ViewGroup.LayoutParams bull2_layout = bull2.getLayoutParams();
+
+        bull_layout.height = 200;
+        bull_layout.width = 200;
+
+        bull1_layout.height = 200;
+        bull1_layout.width = 200;
+
+        bull2_layout.height = 200;
+        bull2_layout.width = 200;
+
+        cow_layout.height = 200;
+        cow_layout.width = 200;
+
+        cow1_layout.height = 200;
+        cow1_layout.width = 200;
+
+        cow2_layout.height = 200;
+        cow2_layout.width = 200;
+
+        bull.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        bull1.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        bull2.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        cow.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        cow1.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        cow2.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        bull.setImageResource(R.drawable.bulls_head);
+        bull1.setImageResource(R.drawable.bulls_head);
+        bull2.setImageResource(R.drawable.bulls_head);
+        cow.setImageResource(R.drawable.cow_head);
+        cow1.setImageResource(R.drawable.cow_head);
+        cow2.setImageResource(R.drawable.cow_head);
+
+        cows_layout.addView(cow);
+        cows_layout.addView(cow1);
+        cows_layout.addView(cow2);
+        bulls_layout.addView(bull);
+        bulls_layout.addView(bull1);
+        bulls_layout.addView(bull2);
+
+        final_layout.addView(cows_layout);
+        final_layout.addView(bulls_layout);
+
+        return final_layout;
     }
 
     public void setDebugBox(String s) {
         testing_dash.setText(s);
     }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+    public void openKeyboard() {
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    public LinearLayout set_word_img(String sequence) {
+        int[] letter_ids = ltrmngr.getLetter(sequence, id_array);
+        guess_box.removeAllViews();
+        for(int i = 0; i < sequence.length(); i++){
+            ImageView letterView = new ImageView(myctxt);
+            letterView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams btn_layout = letterView.getLayoutParams();
+            btn_layout.height = 50;
+            btn_layout.width = 50;
+            letterView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            letterView.setImageResource(letter_ids[i]);
+            guess_box.addView(letterView);
+            // newrow.addView(letterView);
+        }
+        return guess_box;
+    }
+
+
 
 }

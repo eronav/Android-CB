@@ -2,8 +2,10 @@ package com.example.cb;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -78,7 +80,7 @@ public class GuessHistory {
 
             // Add the last row and the CB structure
             myeval.setOrientation(LinearLayout.HORIZONTAL);
-            myeval.addView(guess_pict);
+            //myeval.addView(guess_pict);
             myeval.addView(c_b_layout);
 
             //List_file.add(guess + ": " + stringCow + "C " + stringBull + "B: guess " + String.valueOf(attempts));
@@ -136,6 +138,96 @@ public class GuessHistory {
         for (i = 0; i < s.length(); i++)
             laststr += s.charAt(i);
 
+    }
+
+    public LinearLayout get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff) {
+        int[] result = wgen.evaluateGuess(guess);
+        int cow = result[1];
+        int bull = result[2];
+        int cow_num_id = ltrmngr.get_cow_num_id(cow);
+        int bull_num_id = ltrmngr.get_bull_num_id(bull);
+        LinearLayout cb_eval = new LinearLayout(myctxt);
+        ImageView cow_text = new ImageView(myctxt);
+        ImageView bull_text = new ImageView(myctxt);
+        ImageView cow_img = new ImageView(myctxt);
+        ImageView bull_img = new ImageView(myctxt);
+        cb_eval.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        cow_img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        bull_img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        cow_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        bull_text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        cb_eval.setOrientation(LinearLayout.HORIZONTAL);
+
+        ViewGroup.LayoutParams cow_layout = cow_img.getLayoutParams();
+        cow_layout.height = 120;
+        cow_layout.width = 120;
+        cow_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        ViewGroup.LayoutParams bull_layout = bull_img.getLayoutParams();
+        bull_layout.height = 120;
+        bull_layout.width = 120;
+        bull_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        ViewGroup.LayoutParams cow_num_layout = cow_text.getLayoutParams();
+        cow_num_layout.height = 120;
+        cow_num_layout.width = 120;
+        cow_text.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        ViewGroup.LayoutParams bull_num_layout = bull_text.getLayoutParams();
+        bull_num_layout.height = 120;
+        bull_num_layout.width = 120;
+        bull_text.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        cow_text.setImageResource(cow_num_id);
+        bull_text.setImageResource(bull_num_id);
+        cow_img.setImageResource(R.drawable.cow_head);
+        bull_img.setImageResource(R.drawable.bulls_head);
+
+        if(cow == 0 && bull == 0) {
+            ImageView bomb_pic = new ImageView(myctxt);
+            bomb_pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams bomb_layout = bomb_pic.getLayoutParams();
+            bomb_layout.height = 120;
+            bomb_layout.width = 120;
+            bomb_pic.setImageResource(R.drawable.bomb);
+            cb_eval.addView(bomb_pic);
+        } else if(bull == diff) {
+            ImageView firework_pic = new ImageView(myctxt);
+            firework_pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams firework_layout = firework_pic.getLayoutParams();
+            firework_layout.height = 120;
+            firework_layout.width = 120;
+            firework_pic.setImageResource(R.drawable.firework);
+            cb_eval.addView(firework_pic);
+        } else {
+            cb_eval.addView(bull_text);
+            cb_eval.addView(bull_img);
+            cb_eval.addView(cow_text);
+            cb_eval.addView(cow_img);
+        }
+
+        return cb_eval;
+    }
+
+    public String end_game_new_word(WordGenerator wgen, String guess, int diff, String word) {
+        int[] result = wgen.evaluateGuess(guess);
+        if(result[2] == diff) {
+            String new_word = wgen.targetGen(diff);
+            return new_word;
+        } else {
+            return word;
+        }
+
+    }
+
+    public boolean check_game(WordGenerator wgen, String guess, int diff) {
+        int[] result = wgen.evaluateGuess(guess);
+        if(result[2] == diff) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

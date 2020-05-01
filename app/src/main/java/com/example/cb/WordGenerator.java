@@ -7,11 +7,18 @@ public class WordGenerator {
     private int culty;
 
     WordGenerator(int difficulty) {
+        culty = difficulty;
+        this.targetGen(difficulty);
+    }
+
+    public String getWord() {
+        return goal;
+    }
+    public String targetGen(int diff) {
         goal = "";
         Random myrand = new Random();
 
-        culty = difficulty;
-
+        //culty = diff;
         try {
             for (int i = 0; i < culty;) {
                 int r = myrand.nextInt(26) + 65;
@@ -31,9 +38,6 @@ public class WordGenerator {
             // errbox.setText(e.toString());
             goal="ERRWORD";
         }
-    }
-
-    public String getWord() {
         return goal;
     }
 
