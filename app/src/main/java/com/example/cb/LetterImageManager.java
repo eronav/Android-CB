@@ -1,8 +1,8 @@
 package com.example.cb;
 
 public class LetterImageManager {
-    int[] LetterArray = new int[26];
-    int[] NumberArray = new int[10];
+    public int[] LetterArray = new int[26];
+    public int[] NumberArray = new int[10];
     LetterImageManager() {
 
 
@@ -74,5 +74,13 @@ public class LetterImageManager {
             id_array[i] = R.drawable.bulls_head;
         }
         return id_array;
+    }
+
+    public int get_cow_num_id(int cow) {
+        return NumberArray[cow];
+    }
+
+    public int get_bull_num_id(int bull) {
+        return NumberArray[bull];
     }
 }
