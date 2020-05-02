@@ -32,12 +32,12 @@ public class game_screen extends AppCompatActivity {
     LetterImageManager ltrmngr;
     int[] id_array;
     Context myctxt;
-    LinearLayout newrow;
     String guess;
     LinearLayout cb;
     LinearLayout row;
     int i = 0;
     int diff;
+    int count;
     boolean keyboard_status;
     String word;
     LinearLayout quit_layout;
@@ -60,6 +60,7 @@ public class game_screen extends AppCompatActivity {
         dummy_input = findViewById(R.id.dummy_input);
         myctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
+        ViewGroup.LayoutParams gblp = guess_box.getLayoutParams();
         done_btn = findViewById(R.id.done_btn);
         testing_dash = findViewById(R.id.word);
         myrand= new Random();
@@ -67,17 +68,17 @@ public class game_screen extends AppCompatActivity {
         id_array = new int[6];
         guess = "";
         cb = new LinearLayout(myctxt);
-        newrow = new LinearLayout(myctxt);
+
         row = new LinearLayout(myctxt);
         play_again_layout = (LinearLayout) findViewById(R.id.play_again_layout);
         quit_layout = (LinearLayout) findViewById(R.id.quit_layout);
         word_outer_layout = new LinearLayout(myctxt);
 
         cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         cb.setOrientation(LinearLayout.HORIZONTAL);
-        newrow.setOrientation(LinearLayout.HORIZONTAL);
+
         row.setOrientation(LinearLayout.VERTICAL);
 
         histbox.addView(row);
@@ -152,13 +153,26 @@ public class game_screen extends AppCompatActivity {
                     });
                 }*/
 
-                LinearLayout set_img_eval = ghist.get_img_cb_eval(guess, wgen, myctxt, ltrmngr, diff);
-                // LinearLayout set_img_word = set_word_img(guess);
-                guess_box.removeAllViews();
-                row.addView(set_img_eval);
-                // row.addView(set_word_img1(guess));
-                dummy_input.setText("");
 
+                LinearLayout newrow;
+                newrow = new LinearLayout(myctxt);
+                newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                newrow.setOrientation(LinearLayout.HORIZONTAL);
+
+                LinearLayout word_eval_layout = ghist.get_img_cb_eval(guess, wgen, myctxt, ltrmngr, diff);
+                LinearLayout word_image_layout = (LinearLayout) guess_box.getChildAt(0);
+                guess_box.removeAllViews();
+                
+                if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
+                    try {
+                        newrow.addView(word_image_layout);
+                        newrow.addView(word_eval_layout);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                row.addView(newrow);
+                dummy_input.setText("");
             }
         });
 
@@ -186,15 +200,15 @@ public class game_screen extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // String msgstr = "Input is " + s + " and change started at " + String.valueOf(start) + " for " + String.valueOf(count);
                 // errbox.setText(msgstr);
-                /*LinearLayout innerrow = new LinearLayout(myctxt);
-                innerrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                innerrow.setOrientation(LinearLayout.HORIZONTAL);*/
+
+                LinearLayout innerrow;
 
                 String sequence = s.toString();
                 sequence.toLowerCase();
 
-                guess_box = set_word_img(sequence);
-
+                innerrow = set_word_img(sequence);
+                guess_box.removeAllViews();
+                guess_box.addView(innerrow);
                 /*TextView test_text = new TextView(myctxt);
                 test_text.setText("testing");
                 histbox.removeAllViews();
@@ -331,19 +345,67 @@ public class game_screen extends AppCompatActivity {
 
     public LinearLayout set_word_img(String sequence) {
         int[] letter_ids = ltrmngr.getLetter(sequence, id_array);
-        guess_box.removeAllViews();
+        LinearLayout word_str_layout = new LinearLayout(myctxt);
+        word_str_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        word_str_layout.setOrientation(LinearLayout.HORIZONTAL);
         for(int i = 0; i < sequence.length(); i++){
             ImageView letterView = new ImageView(myctxt);
-            letterView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            ViewGroup.LayoutParams btn_layout = letterView.getLayoutParams();
-            btn_layout.height = 50;
-            btn_layout.width = 50;
+            LinearLayout.LayoutParams letter_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            letterView.setLayoutParams(letter_layout);
+            letter_layout.height = 60;
+            letter_layout.width = 60;
             letterView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            letter_layout.setMargins(10, 10, 10, 10);
             letterView.setImageResource(letter_ids[i]);
-            guess_box.addView(letterView);
+            word_str_layout.addView(letterView);
             // newrow.addView(letterView);
         }
-        return guess_box;
+        return word_str_layout;
+    }
+    
+    private boolean redesign_images(LinearLayout layout, LinearLayout word_layout, LinearLayout eval_layout) {
+
+        return false;
+
+        /*
+        View template_guess_box = findViewById(R.id.design_guess);
+        View template_eval_box = findViewById(R.id.design_eval);
+        View[] template_letters = {
+                findViewById(R.id.design_letter1),
+                findViewById(R.id.design_letter2),
+                findViewById(R.id.design_letter3),
+                findViewById(R.id.design_letter4)
+        };
+        View[] template_evals = {
+                findViewById(R.id.design_eval1),
+                findViewById(R.id.design_eval2),
+                findViewById(R.id.design_eval3),
+                findViewById(R.id.design_eval4)
+        };
+
+        ViewGroup.LayoutParams vglp;
+
+        vglp = template_guess_box.getLayoutParams();
+        word_layout.setLayoutParams(vglp);
+        vglp = template_eval_box.getLayoutParams();
+        eval_layout.setLayoutParams(vglp);
+
+        for (int i=0; i < word_layout.getChildCount(); i++) {
+            vglp = template_letters[i].getLayoutParams();
+            word_layout.getChildAt(i).setLayoutParams(vglp);
+        }
+
+        for (int i=0; i < eval_layout.getChildCount(); i++) {
+            vglp = template_evals[i].getLayoutParams();
+            eval_layout.getChildAt(i).setLayoutParams(vglp);
+        }
+
+        layout.addView(word_layout);
+        layout.addView(eval_layout);
+
+        return true;
+        
+         */
     }
 
 

@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +146,26 @@ public class GuessHistory {
         int[] result = wgen.evaluateGuess(guess);
         int cow = result[1];
         int bull = result[2];
+        LinearLayout cb_eval = new LinearLayout(myctxt);
+        cb_eval.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        cb_eval.setOrientation(LinearLayout.HORIZONTAL);
+
+        if(bull == diff) {
+            mult_animal_img(1, R.drawable.firework, cb_eval, myctxt);
+        } else if(cow == 0 && bull == 0) {
+            mult_animal_img(1, R.drawable.bomb, cb_eval, myctxt);
+        } else {
+            mult_animal_img(bull, R.drawable.bulls_head, cb_eval, myctxt);
+            mult_animal_img(cow, R.drawable.cow_head, cb_eval, myctxt);
+        }
+        return cb_eval;
+    }
+
+    public LinearLayout get_img_cb_eval_numeric(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff) {
+        int[] result = wgen.evaluateGuess(guess);
+        int cow = result[1];
+        int bull = result[2];
         int cow_num_id = ltrmngr.get_cow_num_id(cow);
         int bull_num_id = ltrmngr.get_bull_num_id(bull);
         LinearLayout cb_eval = new LinearLayout(myctxt);
@@ -160,23 +182,23 @@ public class GuessHistory {
         cb_eval.setOrientation(LinearLayout.HORIZONTAL);
 
         ViewGroup.LayoutParams cow_layout = cow_img.getLayoutParams();
-        cow_layout.height = 120;
-        cow_layout.width = 120;
+        cow_layout.height = 60;
+        cow_layout.width = 60;
         cow_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         ViewGroup.LayoutParams bull_layout = bull_img.getLayoutParams();
-        bull_layout.height = 120;
-        bull_layout.width = 120;
+        bull_layout.height = 60;
+        bull_layout.width = 60;
         bull_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         ViewGroup.LayoutParams cow_num_layout = cow_text.getLayoutParams();
-        cow_num_layout.height = 120;
-        cow_num_layout.width = 120;
+        cow_num_layout.height = 60;
+        cow_num_layout.width = 60;
         cow_text.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         ViewGroup.LayoutParams bull_num_layout = bull_text.getLayoutParams();
-        bull_num_layout.height = 120;
-        bull_num_layout.width = 120;
+        bull_num_layout.height = 60;
+        bull_num_layout.width = 60;
         bull_text.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         cow_text.setImageResource(cow_num_id);
@@ -188,16 +210,16 @@ public class GuessHistory {
             ImageView bomb_pic = new ImageView(myctxt);
             bomb_pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             ViewGroup.LayoutParams bomb_layout = bomb_pic.getLayoutParams();
-            bomb_layout.height = 120;
-            bomb_layout.width = 120;
+            bomb_layout.height = 60;
+            bomb_layout.width = 60;
             bomb_pic.setImageResource(R.drawable.bomb);
             cb_eval.addView(bomb_pic);
         } else if(bull == diff) {
             ImageView firework_pic = new ImageView(myctxt);
             firework_pic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             ViewGroup.LayoutParams firework_layout = firework_pic.getLayoutParams();
-            firework_layout.height = 120;
-            firework_layout.width = 120;
+            firework_layout.height = 60;
+            firework_layout.width = 60;
             firework_pic.setImageResource(R.drawable.firework);
             cb_eval.addView(firework_pic);
         } else {
@@ -227,6 +249,19 @@ public class GuessHistory {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void mult_animal_img(int count, @DrawableRes int img_id, LinearLayout layout, Context myctxt) {
+        for (int i = 0; i < count; i++) {
+            ImageView animal_img = new ImageView(myctxt);
+            LinearLayout.LayoutParams animal_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            animal_img.setLayoutParams(animal_layout_params);
+            animal_layout_params.height = 60;
+            animal_layout_params.width = 60;
+            animal_layout_params.setMargins(10,10, 10, 10);
+            animal_img.setImageResource(img_id);
+            layout.addView(animal_img);
         }
     }
 

@@ -31,6 +31,7 @@ public class game_2 extends AppCompatActivity {
         if(getIntent().hasExtra("com.mailronav.cb.help")){
 
         }
+
         play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
