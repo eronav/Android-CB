@@ -162,6 +162,8 @@ public class GuessHistory {
         return cb_eval;
     }
 
+
+
     public LinearLayout get_img_cb_eval_numeric(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff) {
         int[] result = wgen.evaluateGuess(guess);
         int cow = result[1];
@@ -264,5 +266,7 @@ public class GuessHistory {
             layout.addView(animal_img);
         }
     }
+
+
 
 }

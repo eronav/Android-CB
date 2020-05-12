@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".game_screen"
-    android:background="@drawable/farm_backgnd_edited">
+    android:background="@drawable/farm_backgnd_edited"
+    android:inputType="textNoSuggestions|textVisiblePassword">
 
     <TextView
         android:id="@+id/word"
@@ -28,16 +29,16 @@
         android:id="@+id/done_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="36dp"
         android:layout_marginRight="36dp"
+        android:layout_marginBottom="360dp"
         android:text="Done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.645"
         app:layout_constraintStart_toEndOf="@+id/keyboard"
-        app:layout_constraintTop_toBottomOf="@+id/history"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
 
     <ScrollView
         android:id="@+id/history"
@@ -68,34 +69,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/history"></LinearLayout>
 
-    <EditText
-        android:id="@+id/dummy_input"
-        android:layout_width="30dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="290dp"
-        android:layout_marginLeft="290dp"
-        android:layout_marginTop="42dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/done_btn" />
-
     <Button
         android:id="@+id/keyboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="158dp"
         android:layout_marginLeft="158dp"
-        android:layout_marginTop="106dp"
+        android:layout_marginTop="43dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
-        android:layout_marginBottom="229dp"
+        android:layout_marginBottom="292dp"
         android:text="Keyboard"
         app:layout_constraintBottom_toTopOf="@+id/word"
         app:layout_constraintEnd_toStartOf="@+id/done_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
 
     <LinearLayout
         android:id="@+id/play_again_layout"
@@ -103,11 +91,12 @@
         android:layout_height="107dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="218dp"
         android:layout_marginRight="218dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/keyboard"></LinearLayout>
 
@@ -117,11 +106,13 @@
         android:layout_height="107dp"
         android:layout_marginStart="34dp"
         android:layout_marginLeft="34dp"
+        android:layout_marginTop="37dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/play_again_layout"
-        app:layout_constraintTop_toBottomOf="@+id/dummy_input"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/done_btn"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

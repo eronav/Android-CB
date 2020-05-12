@@ -1,8 +1,18 @@
 package com.example.cb;
 
+import android.content.Context;
+import android.view.KeyEvent;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 public class LetterImageManager {
     public int[] LetterArray = new int[26];
     public int[] NumberArray = new int[10];
+    private int int_a = (int) 'a';
+    private int int_z = (int) 'z';
+    private int int_0 = (int) '0';
+    private int int_9 = (int) '9';
     LetterImageManager() {
 
 
@@ -48,11 +58,11 @@ public class LetterImageManager {
 
     public int getLetter(char chr) {
         int chr_int = (int)chr;
-        if (chr_int >= 97 && chr_int <= 122) {
-            return LetterArray[chr_int - 97];
+        if (chr_int >= int_a && chr_int <= int_z) {
+            return LetterArray[chr_int - int_a];
         }
-        else if (chr_int >= 48 && chr_int <= 57) {
-            return NumberArray[chr_int - 48];
+        else if (chr_int >= int_0 && chr_int <= int_9) {
+            return NumberArray[chr_int - int_0];
         }
         else {
             return R.drawable.bad_input;
@@ -74,6 +84,40 @@ public class LetterImageManager {
             id_array[i] = R.drawable.bulls_head;
         }
         return id_array;
+    }
+
+    public int onkeyup_get_letter(int keycode_array) {
+        if(KeyEvent.KEYCODE_A <= keycode_array && keycode_array <= KeyEvent.KEYCODE_Z) {
+            keycode_array = LetterArray[keycode_array - KeyEvent.KEYCODE_A];
+        } else if(KeyEvent.KEYCODE_0 <= keycode_array && keycode_array <= KeyEvent.KEYCODE_9) {
+            keycode_array = NumberArray[keycode_array - KeyEvent.KEYCODE_0];
+        }
+
+        return keycode_array;
+    }
+
+    public LinearLayout get_img_word(String guess, LetterImageManager ltrmngr, LinearLayout ll, Context myctxt) {
+        for(int i = 0; i < guess.length(); i++) {
+            ImageView img = new ImageView(myctxt);
+            img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams img_layout = img.getLayoutParams();
+            img_layout.height = 60;
+            img_layout.width = 60;
+
+            char c = guess.charAt(i);
+            int img_code = (int) c;
+            if (img_code >= int_a && img_code <= int_z) {
+                img.setImageResource(LetterArray[img_code - int_a]);
+            } else if (img_code >= int_0 && img_code <= int_9) {
+                img.setImageResource(NumberArray[img_code - int_0]);
+            } else {
+                img.setImageResource(R.drawable.bad_input);
+            }
+
+
+            ll.addView(img);
+        }
+        return ll;
     }
 
     public int get_cow_num_id(int cow) {

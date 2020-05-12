@@ -2,14 +2,14 @@ package com.example.cb;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Vibrator;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -23,7 +23,7 @@ public class game_screen extends AppCompatActivity {
 
     ScrollView histbox;
     LinearLayout guess_box;
-    EditText dummy_input;
+    Vibrator v;
     Button done_btn;
     TextView testing_dash;
     Random myrand;
@@ -55,9 +55,11 @@ public class game_screen extends AppCompatActivity {
         setContentView(R.layout.activity_game_screen);
 
         histbox = findViewById(R.id.history);
-        Button keyboard_btn = (Button) findViewById(R.id.keyboard);
+        final Button keyboard_btn = (Button) findViewById(R.id.keyboard);
+        keyboard_btn.setFocusable(true);
+        keyboard_btn.setFocusableInTouchMode(true);
         keyboard_status = false;
-        dummy_input = findViewById(R.id.dummy_input);
+        // v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         myctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
         ViewGroup.LayoutParams gblp = guess_box.getLayoutParams();
@@ -69,16 +71,18 @@ public class game_screen extends AppCompatActivity {
         guess = "";
         cb = new LinearLayout(myctxt);
 
+
         row = new LinearLayout(myctxt);
         play_again_layout = (LinearLayout) findViewById(R.id.play_again_layout);
         quit_layout = (LinearLayout) findViewById(R.id.quit_layout);
+
+        ViewGroup.LayoutParams ll_lp;
         word_outer_layout = new LinearLayout(myctxt);
 
         cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         cb.setOrientation(LinearLayout.HORIZONTAL);
-
         row.setOrientation(LinearLayout.VERTICAL);
 
         histbox.addView(row);
@@ -115,54 +119,28 @@ public class game_screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*cb = ghist.AddEntry(wgen, guess, newrow, myctxt);
-                // histbox.removeAllViews();
-                histbox.addView(cb);
-                dummy_input.setText("");
-                if (ghist.check_game(wgen, guess, diff)) {
-                    Button play_again = new Button(myctxt);
-                    Button quit_btn = new Button(myctxt);
-                    play_again.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    quit_btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    ViewGroup.LayoutParams btn_layout = play_again.getLayoutParams();
-                    ViewGroup.LayoutParams btn1_layout = play_again.getLayoutParams();
-                    btn_layout.height = 50;
-                    btn_layout.width = 50;
-                    btn1_layout.height = 50;
-                    btn1_layout.width = 50;
-                    play_again.setText("Play Again");
-                    quit_btn.setText("Quit");
+                if (done_btn.getText().equals("Play Again")) {
+                    Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
+                    startIntent.putExtra("com.mailronav.cb.playAgain", "");
+                    startActivity(startIntent);
+                }
 
-                    play_again_layout.addView(play_again);
-                    quit_layout.addView(quit_btn);
-                    play_again.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
-                            startIntent.putExtra("com.mailronav.cb.playAgain", "");
-                            startActivity(startIntent);
-                        }
-                    });
-                    quit_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent startIntent = new Intent(getApplicationContext(), game_2.class);
-                            startIntent.putExtra("com.mailronav.cb.quit", "");
-                            startActivity(startIntent);
-                        }
-                    });
-                }*/
-
-
-                LinearLayout newrow;
-                newrow = new LinearLayout(myctxt);
+                if (guess.length() != diff) {
+                    return;
+                }
+                LinearLayout newrow = new LinearLayout(myctxt);
                 newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 newrow.setOrientation(LinearLayout.HORIZONTAL);
 
                 LinearLayout word_eval_layout = ghist.get_img_cb_eval(guess, wgen, myctxt, ltrmngr, diff);
-                LinearLayout word_image_layout = (LinearLayout) guess_box.getChildAt(0);
+                LinearLayout word_image_layout = new LinearLayout(myctxt);
+                word_image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                word_image_layout.setOrientation(LinearLayout.HORIZONTAL);
+
+                word_image_layout = ltrmngr.get_img_word(guess, ltrmngr, word_image_layout, myctxt);
                 guess_box.removeAllViews();
-                
+
+
                 if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
                     try {
                         newrow.addView(word_image_layout);
@@ -171,25 +149,52 @@ public class game_screen extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+
+
                 row.addView(newrow);
-                dummy_input.setText("");
+                guess_box.removeAllViews();
+                keyboard_btn.requestFocus();
+
+                if (wgen.evaluateGuess(guess)[2] == diff) {
+                    done_btn.setText("Play Again");
+                    keyboard_btn.setText("Quit");
+                }
+                guess = "";
+            }
+        });
+
+        keyboard_btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (keyboard_btn.getText().equals("Quit")) {
+                    Intent startIntent = new Intent(getApplicationContext(), game_2.class);
+                    startIntent.putExtra("com.mailronav.cb.quit", "");
+                    startActivity(startIntent);
+                } else {
+                    setKeyboard_status(keyboard_btn);
+                }
+
             }
         });
 
         keyboard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(keyboard_status == true) {
-                    hideKeyboardFrom(myctxt, dummy_input);
+                if (keyboard_btn.getText().equals("Quit")) {
+                    Intent startIntent = new Intent(getApplicationContext(), game_2.class);
+                    startIntent.putExtra("com.mailronav.cb.quit", "");
+                    startActivity(startIntent);
                 } else {
-                    openKeyboard();
+                    setKeyboard_status(keyboard_btn);
                 }
             }
         });
 
 
 
-        dummy_input.addTextChangedListener(new TextWatcher() {
+
+
+        /*dummy_input.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -215,19 +220,67 @@ public class game_screen extends AppCompatActivity {
                 histbox.addView(test_text);*/
                 //histbox.addView(guess_box);
                 //histbox.addView(newrow);
-                guess = s.toString();
-            }
+                // guess = s.toString();
+             /*}
 
             @Override
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        }); */
 
         testing_dash.setText(word);
 
 
-    }  // onCreate()
+    } // onCreate()
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        String chr = null;
+        int chr_keycode = 0;
+
+        ImageView img = new ImageView(myctxt);
+        img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        ViewGroup.LayoutParams img_layout = img.getLayoutParams();
+        img_layout.height = 60;
+        img_layout.width = 60;
+        int gl = guess.length();
+
+        if (keyCode == KeyEvent.KEYCODE_DEL) {
+            if (gl == 0) {
+                return true;
+            }
+            if (gl == 1) {
+                guess_box.removeAllViews();
+                guess = "";
+                return true;
+            }
+
+            guess_box.removeViewAt(guess_box.getChildCount() - 1);
+            guess = guess.substring(0, gl-1);
+        } else if (gl == diff) {
+            // Ignore characters if already at max acceptable
+        } else {
+            try {
+                if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
+                    chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
+                    img.setImageResource(chr_keycode);
+                    guess_box.addView(img);
+                    guess += String.valueOf((char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A));
+                } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
+                    chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
+                    img.setImageResource(chr_keycode);
+                    guess_box.addView(img);
+                    guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));
+                }
+                // Silently ignore other characters
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
+    }
 
 
     //Create the creation method
@@ -235,8 +288,8 @@ public class game_screen extends AppCompatActivity {
         ImageView cow_img = new ImageView(myctxt);
         cow_img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         ViewGroup.LayoutParams cow_layout = cow_img.getLayoutParams();
-        cow_layout.height = 120;
-        cow_layout.width = 120;
+        cow_layout.height = 60;
+        cow_layout.width = 60;
         cow_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         cow_img.setImageResource(R.drawable.cow_head);
         return cow_img;
@@ -248,8 +301,8 @@ public class game_screen extends AppCompatActivity {
         ImageView bull_img = new ImageView(myctxt);
         bull_img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         ViewGroup.LayoutParams bull_layout = bull_img.getLayoutParams();
-        bull_layout.height = 120;
-        bull_layout.width = 120;
+        bull_layout.height = 60;
+        bull_layout.width = 60;
         bull_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bull_img.setImageResource(R.drawable.bulls_head);
         return bull_img;
@@ -362,7 +415,23 @@ public class game_screen extends AppCompatActivity {
         }
         return word_str_layout;
     }
-    
+
+    public String getViewText(CharSequence c) {
+        return String.valueOf(c);
+    }
+
+    private void setKeyboard_status(View keyboard_btn) {
+        if(keyboard_status) {
+            hideSoftKeyboard(keyboard_btn);
+            keyboard_status = false;
+        } else {
+            showSoftKeyboard(keyboard_btn);
+            keyboard_status = true;
+            // dummy_input.performClick();
+        }
+
+    }
+
     private boolean redesign_images(LinearLayout layout, LinearLayout word_layout, LinearLayout eval_layout) {
 
         return false;
@@ -404,8 +473,23 @@ public class game_screen extends AppCompatActivity {
         layout.addView(eval_layout);
 
         return true;
-        
+
          */
+    }
+
+    public void showSoftKeyboard(View view) {
+        // if(true /* view.requestFocus() */)
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT); // could use SHOW_FORCED if need be
+        // InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        // this worked: imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+    public void hideSoftKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        // InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
 
