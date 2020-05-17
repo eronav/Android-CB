@@ -1,24 +1,35 @@
 package com.example.cb;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WordGenerator {
     private String goal;
     private int culty;
+    private Context myctxt;
 
-    WordGenerator(int difficulty) {
+    WordGenerator(Context ctxt, int difficulty) {
         culty = difficulty;
-        this.targetGen(difficulty);
+        myctxt = ctxt;
     }
 
     public String getWord() {
+        this.targetGen(culty);
         return goal;
     }
-    public String targetGen(int diff) {
+
+    private String targetGenRandom (int diff) {
+
         goal = "";
         Random myrand = new Random();
-
-        //culty = diff;
         try {
             for (int i = 0; i < culty;) {
                 int r = myrand.nextInt(26) + 65;
@@ -41,11 +52,76 @@ public class WordGenerator {
         return goal;
     }
 
+    public String targetGen(int diff) {
+        goal = targetGenFromDict(diff).toLowerCase();
+        return goal;
+    }
+
+    public List<String> readLine(String path) {
+        List<String> mLines = new ArrayList<>();
+
+        AssetManager am = myctxt.getAssets();
+
+        try {
+            InputStream is = am.open(path);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                mLines.add(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return mLines;
+    }
+
+    private void print (List<String> words) {
+        for (int i = 0; i < 1; i++) {
+            String word = words.get(i);
+            System.out.println(word);
+        }
+    }
+
+    public String targetGenFromDict (int diff){
+        int myLength = -1;
+        String fileToUse;
+        List<String> words = new ArrayList<>();
+
+        switch (diff) {
+            case 3:
+                fileToUse = "word3.txt";
+                break;
+            case 4:
+                fileToUse = "word4.txt";
+                break;
+            case 5:
+                fileToUse = "word5.txt";
+                break;
+            case 6:
+                fileToUse = "word6.txt";
+                break;
+            default:
+                myLength = 0;
+                fileToUse = "";
+        }
+
+        if (myLength == -1) {
+            words = readLine(fileToUse);
+            myLength = words.size();
+            Random myrand = new Random();
+            int randIdx = myrand.nextInt(myLength);
+            return words.get(randIdx);
+        } else {
+            return "ERROR";
+        }
+    }
+
     public int[] evaluateGuess(String guess) {
         String errmsg;
         int[] result = new int[3];
 
-        guess = guess.toUpperCase();
+        guess = guess.toLowerCase();
         if (guess.length() != goal.length()) {
             errmsg = "Wrong number of letters. Please enter a word with " + culty + " letters";
             result[0] = -1;

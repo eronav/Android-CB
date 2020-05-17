@@ -63,6 +63,8 @@ public class game_screen extends AppCompatActivity {
         myctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
         ViewGroup.LayoutParams gblp = guess_box.getLayoutParams();
+        guess_box.setFocusable(true);
+        guess_box.setFocusableInTouchMode(true);
         done_btn = findViewById(R.id.done_btn);
         testing_dash = findViewById(R.id.word);
         myrand= new Random();
@@ -106,8 +108,9 @@ public class game_screen extends AppCompatActivity {
         }
         testing_dash.setText(dash);*/
 
-        wgen = new WordGenerator(diff);
+        wgen = new WordGenerator(myctxt, diff);
         word = wgen.getWord();
+
 
 
         ghist = new GuessHistory();
@@ -120,6 +123,8 @@ public class game_screen extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (done_btn.getText().equals("Play Again")) {
+                    hideSoftKeyboard(keyboard_btn);
+                    keyboard_status = false;
                     Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
                     startIntent.putExtra("com.mailronav.cb.playAgain", "");
                     startActivity(startIntent);
@@ -167,6 +172,8 @@ public class game_screen extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (keyboard_btn.getText().equals("Quit")) {
+                    hideSoftKeyboard(keyboard_btn);
+                    keyboard_status = false;
                     Intent startIntent = new Intent(getApplicationContext(), game_2.class);
                     startIntent.putExtra("com.mailronav.cb.quit", "");
                     startActivity(startIntent);
@@ -190,52 +197,17 @@ public class game_screen extends AppCompatActivity {
             }
         });
 
-
-
-
-
-        /*dummy_input.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // String msgstr = "Input is " + s + " and change started at " + String.valueOf(start) + " for " + String.valueOf(count);
-                // errbox.setText(msgstr);
-
-                LinearLayout innerrow;
-
-                String sequence = s.toString();
-                sequence.toLowerCase();
-
-                innerrow = set_word_img(sequence);
-                guess_box.removeAllViews();
-                guess_box.addView(innerrow);
-                /*TextView test_text = new TextView(myctxt);
-                test_text.setText("testing");
-                histbox.removeAllViews();
-                histbox.addView(test_text);*/
-                //histbox.addView(guess_box);
-                //histbox.addView(newrow);
-                // guess = s.toString();
-             /*}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        }); */
-
         testing_dash.setText(word);
 
 
     } // onCreate()
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return procesesKey(keyCode, event);
+    }
+
+    private boolean procesesKey (int keyCode, KeyEvent event) {
         String chr = null;
         int chr_keycode = 0;
 
@@ -273,6 +245,7 @@ public class game_screen extends AppCompatActivity {
                     guess_box.addView(img);
                     guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));
                 }
+
                 // Silently ignore other characters
             } catch (Exception e) {
                 e.printStackTrace();
