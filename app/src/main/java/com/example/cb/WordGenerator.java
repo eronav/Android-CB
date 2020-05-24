@@ -16,6 +16,7 @@ public class WordGenerator {
     private int culty;
     private Context myctxt;
 
+
     WordGenerator(Context ctxt, int difficulty) {
         culty = difficulty;
         myctxt = ctxt;
@@ -52,12 +53,24 @@ public class WordGenerator {
         return goal;
     }
 
+    public int getHint (String word, boolean[] posArray, int diff, boolean[] hintArray) {
+        Random myrand = new Random();
+        int randIdx = myrand.nextInt(diff);
+        while (posArray[randIdx] == true) {
+            randIdx = myrand.nextInt(diff);
+        }
+        posArray[randIdx] = true;
+        hintArray[randIdx] = true;
+        char randChr = word.charAt(randIdx);
+        return (randIdx << 8) | ((int) randChr);
+    }
+
     public String targetGen(int diff) {
         goal = targetGenFromDict(diff).toLowerCase();
         return goal;
     }
 
-    public List<String> readLine(String path) {
+    public List<String> getWordList(String path) {
         List<String> mLines = new ArrayList<>();
 
         AssetManager am = myctxt.getAssets();
@@ -70,7 +83,7 @@ public class WordGenerator {
             while ((line = reader.readLine()) != null)
                 mLines.add(line);
         } catch (IOException e) {
-            e.printStackTrace();
+            // ForDebug e.printStackTrace();
         }
 
         return mLines;
@@ -84,37 +97,30 @@ public class WordGenerator {
     }
 
     public String targetGenFromDict (int diff){
-        int myLength = -1;
         String fileToUse;
-        List<String> words = new ArrayList<>();
+        List<String> words;
 
-        switch (diff) {
-            case 3:
-                fileToUse = "word3.txt";
-                break;
-            case 4:
-                fileToUse = "word4.txt";
-                break;
-            case 5:
-                fileToUse = "word5.txt";
-                break;
-            case 6:
-                fileToUse = "word6.txt";
-                break;
-            default:
-                myLength = 0;
-                fileToUse = "";
+        boolean double_letters = GameEnvironment.ups.IsDupsOn();
+
+        // Build the name of the file that we should be using
+        // Format: "word" + <number-of-letters> + "[Double]" + ".txt"
+        fileToUse = "word";
+        fileToUse += diff;
+        if (double_letters) {
+            fileToUse += "Double";
         }
+        fileToUse += ".txt";
 
-        if (myLength == -1) {
-            words = readLine(fileToUse);
-            myLength = words.size();
+        words = getWordList(fileToUse);
+        int myLength = words.size();
+
+        if (myLength > 0) {
             Random myrand = new Random();
             int randIdx = myrand.nextInt(myLength);
-            return words.get(randIdx);
-        } else {
-            return "ERROR";
+            String word = words.get(randIdx);
+            return word;
         }
+        return "ERROR";
     }
 
     public int[] evaluateGuess(String guess) {

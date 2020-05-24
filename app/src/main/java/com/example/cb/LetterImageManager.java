@@ -96,25 +96,30 @@ public class LetterImageManager {
         return keycode_array;
     }
 
+    public ImageView get_image_for_a_letter(Context myctxt, char c) {
+        ImageView img = new ImageView(myctxt);
+        img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        ViewGroup.LayoutParams img_layout = img.getLayoutParams();
+        img_layout.height = 60;
+        img_layout.width = 60;
+
+        int img_code = (int) c;
+        if (img_code >= int_a && img_code <= int_z) {
+            img.setImageResource(LetterArray[img_code - int_a]);
+        } else if (img_code >= int_0 && img_code <= int_9) {
+            img.setImageResource(NumberArray[img_code - int_0]);
+        } else {
+            img.setImageResource(R.drawable.bad_input);
+        }
+
+        return img;
+    }
+
+
+    // Given a string, it gets the images for each letter and populates the passed-in LinearLayout
     public LinearLayout get_img_word(String guess, LetterImageManager ltrmngr, LinearLayout ll, Context myctxt) {
         for(int i = 0; i < guess.length(); i++) {
-            ImageView img = new ImageView(myctxt);
-            img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            ViewGroup.LayoutParams img_layout = img.getLayoutParams();
-            img_layout.height = 60;
-            img_layout.width = 60;
-
-            char c = guess.charAt(i);
-            int img_code = (int) c;
-            if (img_code >= int_a && img_code <= int_z) {
-                img.setImageResource(LetterArray[img_code - int_a]);
-            } else if (img_code >= int_0 && img_code <= int_9) {
-                img.setImageResource(NumberArray[img_code - int_0]);
-            } else {
-                img.setImageResource(R.drawable.bad_input);
-            }
-
-
+            ImageView img = get_image_for_a_letter(myctxt, guess.charAt(i));
             ll.addView(img);
         }
         return ll;

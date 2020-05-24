@@ -83,36 +83,21 @@
         app:layout_constraintBottom_toTopOf="@+id/word"
         app:layout_constraintEnd_toStartOf="@+id/done_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
+        app:layout_constraintTop_toBottomOf="@+id/guess_box"/>
 
-    <LinearLayout
-        android:id="@+id/play_again_layout"
-        android:layout_width="177dp"
-        android:layout_height="107dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="218dp"
-        android:layout_marginRight="218dp"
-        android:orientation="horizontal"
+    <ImageButton
+        android:id="@+id/hint_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginLeft="157dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="208dp"
+        android:layout_marginRight="208dp"
+        android:background="#00000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keyboard"></LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/quit_layout"
-        android:layout_width="168dp"
-        android:layout_height="107dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginLeft="34dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/play_again_layout"
-        app:layout_constraintTop_toBottomOf="@+id/done_btn"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/keyboard"
+        app:srcCompat="@drawable/hint_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

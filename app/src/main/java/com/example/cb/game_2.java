@@ -1,5 +1,6 @@
 package com.example.cb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class game_2 extends AppCompatActivity {
 
+    public Context myappctxt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +19,8 @@ public class game_2 extends AppCompatActivity {
         Button play_btn = (Button) findViewById(R.id.play_btn);
         final Button options_btn = (Button) findViewById(R.id.option_btn);
         Button help_btn = (Button) findViewById(R.id.help_btn);
+        myappctxt = getApplicationContext();
+
         if(getIntent().hasExtra("com.mailronav.cb.DUDE")){
 
         }
@@ -25,12 +30,16 @@ public class game_2 extends AppCompatActivity {
         if(getIntent().hasExtra("com.mailronav.cb.quit")){
 
         }
-        if(getIntent().hasExtra("com.mailronav.cb.option")){
+        if(getIntent().hasExtra("com.mailronav.cb.option")) {
 
         }
         if(getIntent().hasExtra("com.mailronav.cb.help")){
 
         }
+
+        GameEnvironment.ups = new UserPrefs();
+        GameEnvironment.musicman = new MusicManager(myappctxt);
+
 
         play_btn.setOnClickListener(new View.OnClickListener() {
             @Override

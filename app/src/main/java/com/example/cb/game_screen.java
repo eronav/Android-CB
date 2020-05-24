@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -19,21 +20,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
+
+
 public class game_screen extends AppCompatActivity {
 
     ScrollView histbox;
     LinearLayout guess_box;
+    GuessInputBox gbox;
+
     Vibrator v;
     Button done_btn;
     TextView testing_dash;
     Random myrand;
     WordGenerator wgen;
+    UserPrefs ups;
+
     GuessHistory ghist;
     LetterImageManager ltrmngr;
     int[] id_array;
-    Context myctxt;
+    Context myctxt, myappctxt;
     String guess;
-    LinearLayout cb;
     LinearLayout row;
     int i = 0;
     int diff;
@@ -42,7 +48,11 @@ public class game_screen extends AppCompatActivity {
     String word;
     LinearLayout quit_layout;
     LinearLayout play_again_layout;
-    LinearLayout word_outer_layout;
+    ImageButton hint_btn;
+    boolean gameHasEnded;
+    boolean[] posHasCome;
+    boolean hintPressed;
+    String hasTyped;
 
 
 
@@ -61,39 +71,30 @@ public class game_screen extends AppCompatActivity {
         keyboard_status = false;
         // v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         myctxt = getApplicationContext();
+        myappctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
-        ViewGroup.LayoutParams gblp = guess_box.getLayoutParams();
-        guess_box.setFocusable(true);
-        guess_box.setFocusableInTouchMode(true);
         done_btn = findViewById(R.id.done_btn);
         testing_dash = findViewById(R.id.word);
         myrand= new Random();
         ltrmngr = new LetterImageManager();
         id_array = new int[6];
         guess = "";
-        cb = new LinearLayout(myctxt);
+        hint_btn = findViewById(R.id.hint_btn);
+        gameHasEnded = false;
+        hintPressed =  false;
+        hasTyped = "";
 
 
+        // This LinearLayout is the layout organizer for the ScrollView, histbox
         row = new LinearLayout(myctxt);
-        play_again_layout = (LinearLayout) findViewById(R.id.play_again_layout);
-        quit_layout = (LinearLayout) findViewById(R.id.quit_layout);
-
-        ViewGroup.LayoutParams ll_lp;
-        word_outer_layout = new LinearLayout(myctxt);
-
-        cb.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        cb.setOrientation(LinearLayout.HORIZONTAL);
         row.setOrientation(LinearLayout.VERTICAL);
 
         histbox.addView(row);
 
         final boolean check_keyboard = false;
 
-
         String dash = "";
-        final int i = 0;
         if(getIntent().hasExtra("com.mailronav.cb.three")){
             diff = 3;
         } else if(getIntent().hasExtra("com.mailronav.cb.four")){
@@ -103,15 +104,21 @@ public class game_screen extends AppCompatActivity {
         } else {
             diff = 6;
         }
-        /*for(int i = 0; i < diff; i++){
-            dash += "-";
+
+        gbox = new GuessInputBox(myappctxt, guess_box, diff);
+        gbox.build_guess_box();
+
+        posHasCome = new boolean[diff];
+
+        for (int i = 0; i < diff; i++) {
+            posHasCome[i] = false;
         }
-        testing_dash.setText(dash);*/
 
-        wgen = new WordGenerator(myctxt, diff);
+        GameEnvironment.wgen = new WordGenerator(myctxt, diff);
+        wgen = GameEnvironment.wgen;
+
+        // Get a new target word
         word = wgen.getWord();
-
-
 
         ghist = new GuessHistory();
         //ghist.CreateListView(game_screen.this, histbox);
@@ -122,17 +129,22 @@ public class game_screen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 if (done_btn.getText().equals("Play Again")) {
                     hideSoftKeyboard(keyboard_btn);
                     keyboard_status = false;
                     Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
                     startIntent.putExtra("com.mailronav.cb.playAgain", "");
                     startActivity(startIntent);
+                    gameHasEnded = true;
                 }
 
                 if (guess.length() != diff) {
                     return;
                 }
+
+                // Create a new row to be added to ScrollView.
+                // newrow should consist of the just completed guess and its evaluation
                 LinearLayout newrow = new LinearLayout(myctxt);
                 newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 newrow.setOrientation(LinearLayout.HORIZONTAL);
@@ -143,7 +155,7 @@ public class game_screen extends AppCompatActivity {
                 word_image_layout.setOrientation(LinearLayout.HORIZONTAL);
 
                 word_image_layout = ltrmngr.get_img_word(guess, ltrmngr, word_image_layout, myctxt);
-                guess_box.removeAllViews();
+                gbox.reset_guess_box();
 
 
                 if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
@@ -155,9 +167,7 @@ public class game_screen extends AppCompatActivity {
                     }
                 }
 
-
                 row.addView(newrow);
-                guess_box.removeAllViews();
                 keyboard_btn.requestFocus();
 
                 if (wgen.evaluateGuess(guess)[2] == diff) {
@@ -165,6 +175,36 @@ public class game_screen extends AppCompatActivity {
                     keyboard_btn.setText("Quit");
                 }
                 guess = "";
+            }
+        });
+
+        hint_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hintPressed = true;
+                boolean[] filledPos = new boolean[diff];
+
+                for (int i = 0; i < diff; i++) {
+                    if (i < guess.length() || posHasCome[i] == true) {
+                        filledPos[i] = true;
+                    } else {
+                        filledPos[i] = false;
+                    }
+                }
+                int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
+                int pos = chrWithPos >> 8;
+                char letter = (char) (chrWithPos & 0xFF);
+                // ImageView img = ltrmngr.get_image_for_a_letter(myctxt, letter);
+                for (int i = 0; i < diff; i++) {
+                    if (i < guess.length()) {
+                        filledPos[i] = true;
+                    } else if (posHasCome[i] == true) {
+
+                    } else {
+                        filledPos[i] = false;
+                    }
+                }
+                gbox.setImageAt(pos, ltrmngr.getLetter(letter));
             }
         });
 
@@ -177,6 +217,7 @@ public class game_screen extends AppCompatActivity {
                     Intent startIntent = new Intent(getApplicationContext(), game_2.class);
                     startIntent.putExtra("com.mailronav.cb.quit", "");
                     startActivity(startIntent);
+                    gameHasEnded = true;
                 } else {
                     setKeyboard_status(keyboard_btn);
                 }
@@ -197,17 +238,76 @@ public class game_screen extends AppCompatActivity {
             }
         });
 
+        keyboard_btn.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (event.getAction() != KeyEvent.ACTION_UP)
+                    return false;
+
+                String chr = null;
+                int chr_keycode = 0;
+
+                /* ImageView img = new ImageView(myctxt);
+                img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                ViewGroup.LayoutParams img_layout = img.getLayoutParams();
+                img_layout.height = 60;
+                img_layout.width = 60; */
+                int gl = guess.length();
+
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    if (gl == 0) {
+                        return true;
+                    }
+                    if (gl == 1) {
+                        gbox.reset_guess_box();
+                        guess = "";
+                        return true;
+                    }
+
+                    gbox.deleteImageAt(gl-1);
+                    guess = guess.substring(0, gl-1);
+                } else if (gl == diff) {
+                    // Ignore characters if already at max acceptable
+                } else {
+                    try {
+                        if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
+                            chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
+                            gbox.setImageAt(gl, chr_keycode);
+                            guess += String.valueOf((char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A));
+                        } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
+                            chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
+                            gbox.setImageAt(gl, chr_keycode);
+                            guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));
+                        }
+
+                        // Silently ignore other characters
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return true;
+            }
+        });
+
         testing_dash.setText(word);
 
+        /* LinearLayout shadow_guess_box = new MyLL(myctxt, guess_box, ltrmngr, guess, diff);
+        shadow_guess_box.setFocusable(true);
+        shadow_guess_box.setFocusableInTouchMode(true);
+        shadow_guess_box.requestFocus();
+         */
 
     } // onCreate()
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        return procesesKey(keyCode, event);
+        return false;
+        // return procesesKey(keyCode, event);
     }
 
-    private boolean procesesKey (int keyCode, KeyEvent event) {
+    public boolean procesesKey (int keyCode, KeyEvent event) {
         String chr = null;
         int chr_keycode = 0;
 
@@ -279,6 +379,11 @@ public class game_screen extends AppCompatActivity {
         bull_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bull_img.setImageResource(R.drawable.bulls_head);
         return bull_img;
+    }
+
+    public boolean hasGameEnded ()
+    {
+        return gameHasEnded;
     }
 
     public LinearLayout add_row() {
@@ -464,7 +569,4 @@ public class game_screen extends AppCompatActivity {
         // InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
-
-
-
 }
