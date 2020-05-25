@@ -86,14 +86,17 @@ public class LetterImageManager {
         return id_array;
     }
 
-    public int onkeyup_get_letter(int keycode_array) {
-        if(KeyEvent.KEYCODE_A <= keycode_array && keycode_array <= KeyEvent.KEYCODE_Z) {
-            keycode_array = LetterArray[keycode_array - KeyEvent.KEYCODE_A];
-        } else if(KeyEvent.KEYCODE_0 <= keycode_array && keycode_array <= KeyEvent.KEYCODE_9) {
-            keycode_array = NumberArray[keycode_array - KeyEvent.KEYCODE_0];
+    public int get_imgres_for_key(int keycode) {
+        char c;
+        int resid = -1;
+
+        if(KeyEvent.KEYCODE_A <= keycode && keycode <= KeyEvent.KEYCODE_Z) {
+            resid = LetterArray[keycode - KeyEvent.KEYCODE_A];
+        } else if(KeyEvent.KEYCODE_0 <= keycode && keycode <= KeyEvent.KEYCODE_9) {
+            resid = NumberArray[keycode - KeyEvent.KEYCODE_0];
         }
 
-        return keycode_array;
+        return resid;
     }
 
     public ImageView get_image_for_a_letter(Context myctxt, char c) {

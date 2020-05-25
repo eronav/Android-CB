@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,32 +26,29 @@ public class game_screen extends AppCompatActivity {
     ScrollView histbox;
     LinearLayout guess_box;
     GuessInputBox gbox;
-
-    Vibrator v;
     Button done_btn;
     TextView testing_dash;
     Random myrand;
     WordGenerator wgen;
     UserPrefs ups;
-
+    HintManager hintmngr;
+    HintManager guessmngr;
     GuessHistory ghist;
     LetterImageManager ltrmngr;
     int[] id_array;
     Context myctxt, myappctxt;
     String guess;
+    String combo_guess;
     LinearLayout row;
-    int i = 0;
     int diff;
-    int count;
     boolean keyboard_status;
     String word;
-    LinearLayout quit_layout;
-    LinearLayout play_again_layout;
     ImageButton hint_btn;
     boolean gameHasEnded;
     boolean[] posHasCome;
     boolean hintPressed;
     String hasTyped;
+    GuessInputBox GIB;
 
 
 
@@ -79,6 +75,7 @@ public class game_screen extends AppCompatActivity {
         ltrmngr = new LetterImageManager();
         id_array = new int[6];
         guess = "";
+        combo_guess = "";
         hint_btn = findViewById(R.id.hint_btn);
         gameHasEnded = false;
         hintPressed =  false;
@@ -91,8 +88,6 @@ public class game_screen extends AppCompatActivity {
         row.setOrientation(LinearLayout.VERTICAL);
 
         histbox.addView(row);
-
-        final boolean check_keyboard = false;
 
         String dash = "";
         if(getIntent().hasExtra("com.mailronav.cb.three")){
@@ -121,6 +116,10 @@ public class game_screen extends AppCompatActivity {
         word = wgen.getWord();
 
         ghist = new GuessHistory();
+        hintmngr = new HintManager(diff);
+        guessmngr = new HintManager(diff);
+
+        GIB = new GuessInputBox(myappctxt, guess_box, diff);
         //ghist.CreateListView(game_screen.this, histbox);
 
 
@@ -139,9 +138,13 @@ public class game_screen extends AppCompatActivity {
                     gameHasEnded = true;
                 }
 
-                if (guess.length() != diff) {
+                if (guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0) != diff) {
                     return;
                 }
+
+                combo_guess = "";
+                combo_guess = hintmngr.addToString(combo_guess);
+                combo_guess = guessmngr.addToString(combo_guess);
 
                 // Create a new row to be added to ScrollView.
                 // newrow should consist of the just completed guess and its evaluation
@@ -149,14 +152,14 @@ public class game_screen extends AppCompatActivity {
                 newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 newrow.setOrientation(LinearLayout.HORIZONTAL);
 
-                LinearLayout word_eval_layout = ghist.get_img_cb_eval(guess, wgen, myctxt, ltrmngr, diff);
+                LinearLayout word_eval_layout = ghist.get_img_cb_eval(combo_guess, wgen, myctxt, ltrmngr, diff);
                 LinearLayout word_image_layout = new LinearLayout(myctxt);
                 word_image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 word_image_layout.setOrientation(LinearLayout.HORIZONTAL);
 
-                word_image_layout = ltrmngr.get_img_word(guess, ltrmngr, word_image_layout, myctxt);
+                word_image_layout = ltrmngr.get_img_word(combo_guess, ltrmngr, word_image_layout, myctxt);
                 gbox.reset_guess_box();
-
+                hintmngr.populate_gbox(gbox, ltrmngr);
 
                 if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
                     try {
@@ -170,11 +173,12 @@ public class game_screen extends AppCompatActivity {
                 row.addView(newrow);
                 keyboard_btn.requestFocus();
 
-                if (wgen.evaluateGuess(guess)[2] == diff) {
+                if (wgen.evaluateGuess(combo_guess)[2] == diff) {
                     done_btn.setText("Play Again");
                     keyboard_btn.setText("Quit");
                 }
-                guess = "";
+                combo_guess = "";
+                guessmngr.reset();
             }
         });
 
@@ -184,26 +188,14 @@ public class game_screen extends AppCompatActivity {
                 hintPressed = true;
                 boolean[] filledPos = new boolean[diff];
 
-                for (int i = 0; i < diff; i++) {
-                    if (i < guess.length() || posHasCome[i] == true) {
-                        filledPos[i] = true;
-                    } else {
-                        filledPos[i] = false;
-                    }
-                }
+                guessmngr.getPositions(filledPos, true);
+                hintmngr.getPositions(filledPos, false);
+
                 int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
                 int pos = chrWithPos >> 8;
                 char letter = (char) (chrWithPos & 0xFF);
-                // ImageView img = ltrmngr.get_image_for_a_letter(myctxt, letter);
-                for (int i = 0; i < diff; i++) {
-                    if (i < guess.length()) {
-                        filledPos[i] = true;
-                    } else if (posHasCome[i] == true) {
 
-                    } else {
-                        filledPos[i] = false;
-                    }
-                }
+                hintmngr.setLetter(pos, letter);
                 gbox.setImageAt(pos, ltrmngr.getLetter(letter));
             }
         });
@@ -245,43 +237,35 @@ public class game_screen extends AppCompatActivity {
                 if (event.getAction() != KeyEvent.ACTION_UP)
                     return false;
 
-                String chr = null;
-                int chr_keycode = 0;
-
-                /* ImageView img = new ImageView(myctxt);
-                img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                ViewGroup.LayoutParams img_layout = img.getLayoutParams();
-                img_layout.height = 60;
-                img_layout.width = 60; */
-                int gl = guess.length();
-
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
-                    if (gl == 0) {
-                        return true;
-                    }
-                    if (gl == 1) {
-                        gbox.reset_guess_box();
-                        guess = "";
-                        return true;
-                    }
+                    int delPos = guessmngr.delLast();
 
-                    gbox.deleteImageAt(gl-1);
-                    guess = guess.substring(0, gl-1);
-                } else if (gl == diff) {
+                    if (delPos >= 0)
+                        gbox.deleteImageAt(delPos);
+
+                } else if ((guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0)) == diff) {
                     // Ignore characters if already at max acceptable
                 } else {
+                    int img_resid = 0;
+                    char c = ' ';
+
                     try {
                         if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
-                            chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
-                            gbox.setImageAt(gl, chr_keycode);
-                            guess += String.valueOf((char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A));
+                            img_resid = ltrmngr.get_imgres_for_key(keyCode);
+                            c = (char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A);
                         } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
-                            chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
-                            gbox.setImageAt(gl, chr_keycode);
-                            guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));
+                            img_resid = ltrmngr.get_imgres_for_key(keyCode);
+                            c = (char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0);
                         }
 
-                        // Silently ignore other characters
+                        if (c != ' ') {
+                            int nextPos = guessmngr.getHighestPos()+1;
+                            nextPos = hintmngr.getNextPos(nextPos);
+
+                            guessmngr.setLetter(nextPos, c);
+                            gbox.setImageAt(nextPos, img_resid);
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -306,55 +290,6 @@ public class game_screen extends AppCompatActivity {
         return false;
         // return procesesKey(keyCode, event);
     }
-
-    public boolean procesesKey (int keyCode, KeyEvent event) {
-        String chr = null;
-        int chr_keycode = 0;
-
-        ImageView img = new ImageView(myctxt);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        ViewGroup.LayoutParams img_layout = img.getLayoutParams();
-        img_layout.height = 60;
-        img_layout.width = 60;
-        int gl = guess.length();
-
-        if (keyCode == KeyEvent.KEYCODE_DEL) {
-            if (gl == 0) {
-                return true;
-            }
-            if (gl == 1) {
-                guess_box.removeAllViews();
-                guess = "";
-                return true;
-            }
-
-            guess_box.removeViewAt(guess_box.getChildCount() - 1);
-            guess = guess.substring(0, gl-1);
-        } else if (gl == diff) {
-            // Ignore characters if already at max acceptable
-        } else {
-            try {
-                if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
-                    chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
-                    img.setImageResource(chr_keycode);
-                    guess_box.addView(img);
-                    guess += String.valueOf((char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A));
-                } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
-                    chr_keycode = ltrmngr.onkeyup_get_letter(keyCode);
-                    img.setImageResource(chr_keycode);
-                    guess_box.addView(img);
-                    guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));
-                }
-
-                // Silently ignore other characters
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return true;
-    }
-
 
     //Create the creation method
     public ImageView get_cow_img() {

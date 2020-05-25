@@ -61,4 +61,13 @@ public class GuessInputBox {
         }
     }
 
+    public int moveCursor (boolean[] posArray) {
+        for (int i = 0; i < posArray.length; i++) {
+            if (posArray[i] == false) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
 }
