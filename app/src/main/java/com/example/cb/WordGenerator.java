@@ -104,10 +104,9 @@ public class WordGenerator {
 
         // Build the name of the file that we should be using
         // Format: "word" + <number-of-letters> + "[Double]" + ".txt"
-        fileToUse = "word";
-        fileToUse += diff;
+        fileToUse = "word" + diff;
         if (double_letters) {
-            fileToUse += "Double";
+            fileToUse += "Dupe";
         }
         fileToUse += ".txt";
 

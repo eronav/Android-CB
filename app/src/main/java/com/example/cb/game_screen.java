@@ -49,6 +49,7 @@ public class game_screen extends AppCompatActivity {
     boolean hintPressed;
     String hasTyped;
     GuessInputBox GIB;
+    KeyStrokeManager KSM;
 
 
 
@@ -102,6 +103,8 @@ public class game_screen extends AppCompatActivity {
 
         gbox = new GuessInputBox(myappctxt, guess_box, diff);
         gbox.build_guess_box();
+        KSM = new KeyStrokeManager();
+        ups = GameEnvironment.ups;
 
         posHasCome = new boolean[diff];
 
@@ -114,6 +117,7 @@ public class game_screen extends AppCompatActivity {
 
         // Get a new target word
         word = wgen.getWord();
+
 
         ghist = new GuessHistory();
         hintmngr = new HintManager(diff);
@@ -247,30 +251,27 @@ public class game_screen extends AppCompatActivity {
                     // Ignore characters if already at max acceptable
                 } else {
                     int img_resid = 0;
-                    char c = ' ';
+                    char c = KSM.getCharForKeycode(keyCode, event);
+                    img_resid = ltrmngr.get_imgres_for_key(keyCode);
 
-                    try {
-                        if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
-                            img_resid = ltrmngr.get_imgres_for_key(keyCode);
-                            c = (char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A);
-                        } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
-                            img_resid = ltrmngr.get_imgres_for_key(keyCode);
-                            c = (char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0);
-                        }
-
-                        if (c != ' ') {
-                            int nextPos = guessmngr.getHighestPos()+1;
+                    if (c != ' ') {
+                        if (hintmngr.hasChar(c) || guessmngr.hasChar(c)) {
+                            if (!ups.IsDupsOn()) {
+                                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
+                            } else {
+                                int nextPos = guessmngr.getHighestPos() + 1;
+                                nextPos = hintmngr.getNextPos(nextPos);
+                                guessmngr.setLetter(nextPos, c);
+                                gbox.setImageAt(nextPos, img_resid);
+                            }
+                        } else {
+                            int nextPos = guessmngr.getHighestPos() + 1;
                             nextPos = hintmngr.getNextPos(nextPos);
-
                             guessmngr.setLetter(nextPos, c);
                             gbox.setImageAt(nextPos, img_resid);
                         }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
-
                 return true;
             }
         });

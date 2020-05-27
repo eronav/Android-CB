@@ -34,6 +34,7 @@
         android:layout_marginRight="36dp"
         android:layout_marginBottom="360dp"
         android:text="Done"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.645"
@@ -75,29 +76,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="158dp"
         android:layout_marginLeft="158dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="39dp"
         android:layout_marginEnd="22dp"
         android:layout_marginRight="22dp"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="296dp"
         android:text="Keyboard"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/word"
         app:layout_constraintEnd_toStartOf="@+id/done_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box"/>
+        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
 
     <ImageButton
         android:id="@+id/hint_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="157dp"
-        android:layout_marginLeft="157dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="208dp"
-        android:layout_marginRight="208dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="65dp"
+        android:layout_marginRight="65dp"
         android:background="#00000000"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/keyboard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/keyboard"
+        app:layout_constraintTop_toBottomOf="@+id/guess_box"
         app:srcCompat="@drawable/hint_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

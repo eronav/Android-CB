@@ -87,15 +87,12 @@ public class LetterImageManager {
     }
 
     public int get_imgres_for_key(int keycode) {
-        char c;
         int resid = -1;
-
         if(KeyEvent.KEYCODE_A <= keycode && keycode <= KeyEvent.KEYCODE_Z) {
             resid = LetterArray[keycode - KeyEvent.KEYCODE_A];
         } else if(KeyEvent.KEYCODE_0 <= keycode && keycode <= KeyEvent.KEYCODE_9) {
             resid = NumberArray[keycode - KeyEvent.KEYCODE_0];
         }
-
         return resid;
     }
 
