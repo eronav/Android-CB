@@ -2,7 +2,6 @@ package com.example.cb;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -20,17 +19,20 @@ public class GuessInputBox {
     public void build_guess_box () {
         for (int i = 0; i < diff; i++) {
             ImageView v = new ImageView(appctxt);
-            ViewGroup.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            img_layout.height = 60;
-            img_layout.width = 60;
+            LinearLayout.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            v.setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
+            img_layout.height = 120;
+            img_layout.width = 120;
+            img_layout.setMargins(0,0,4,0);
             v.setLayoutParams(img_layout);
             thebox.addView(v);
         }
     }
 
-    public void reset_guess_box() {
+    public void reset_guess_box(boolean rebuild) {
         thebox.removeAllViews();
-        build_guess_box();
+        if (rebuild)
+            build_guess_box();
     }
 
     public void setImageAt(int pos, int img_resid) {
@@ -38,6 +40,14 @@ public class GuessInputBox {
             ImageView img = (ImageView) thebox.getChildAt(pos);
             img.setImageResource(img_resid);
         }
+    }
+
+    public void removeBorderAt(int pos) {
+        thebox.getChildAt(pos).setBackgroundDrawable(null);
+    }
+
+    public void setBorderAt(int pos) {
+        thebox.getChildAt(pos).setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
     }
 
     public void deleteImageAt(int pos) {

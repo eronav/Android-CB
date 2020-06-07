@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="69dp"
         android:layout_marginLeft="69dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="69dp"
         android:layout_marginRight="69dp"
         android:text="Cows and Bulls"
@@ -23,7 +23,7 @@
         android:textStyle="bold"
         app:fontFamily="@font/cantora_one"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

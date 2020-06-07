@@ -49,6 +49,7 @@ public class options_activity extends AppCompatActivity {
                     GameEnvironment.musicman.stop();
                 }
                 GameEnvironment.ups.SetMusic(musicSwitch.isChecked());
+                Toast.makeText(getApplicationContext(), String.valueOf(GameEnvironment.ups.IsMusicOn()), Toast.LENGTH_SHORT).show();
             }
         });
 

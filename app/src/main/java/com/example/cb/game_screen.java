@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -16,12 +20,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Random;
 
 
 
-public class game_screen extends AppCompatActivity {
+public class game_screen extends AppCompatActivity{
 
     ScrollView histbox;
     LinearLayout guess_box;
@@ -41,15 +46,16 @@ public class game_screen extends AppCompatActivity {
     String combo_guess;
     LinearLayout row;
     int diff;
-    boolean keyboard_status;
+    boolean keyboard_visible;
     String word;
     ImageButton hint_btn;
-    boolean gameHasEnded;
     boolean[] posHasCome;
     boolean hintPressed;
     String hasTyped;
     GuessInputBox GIB;
     KeyStrokeManager KSM;
+    Button keyboard_btn;
+    public int count = 0;
 
 
 
@@ -61,26 +67,29 @@ public class game_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
 
+        GameEnvironment.main_game = this;
+
         histbox = findViewById(R.id.history);
-        final Button keyboard_btn = (Button) findViewById(R.id.keyboard);
-        keyboard_btn.setFocusable(true);
-        keyboard_btn.setFocusableInTouchMode(true);
-        keyboard_status = false;
+        // RDCHG
+        keyboard_visible = false;
         // v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         myctxt = getApplicationContext();
         myappctxt = getApplicationContext();
         guess_box = findViewById(R.id.guess_box);
-        done_btn = findViewById(R.id.done_btn);
-        testing_dash = findViewById(R.id.word);
+        guess_box.setFocusable(true);
+        guess_box.setFocusableInTouchMode(true);
+        // guess_box.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        // guess_box.setDividerPadding((int) UIUtil.convertDpToPx(myappctxt,15));
+        guess_box.setGravity(Gravity.CENTER_HORIZONTAL);
         myrand= new Random();
         ltrmngr = new LetterImageManager();
         id_array = new int[6];
         guess = "";
         combo_guess = "";
-        hint_btn = findViewById(R.id.hint_btn);
-        gameHasEnded = false;
         hintPressed =  false;
         hasTyped = "";
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
 
         // This LinearLayout is the layout organizer for the ScrollView, histbox
@@ -93,13 +102,19 @@ public class game_screen extends AppCompatActivity {
         String dash = "";
         if(getIntent().hasExtra("com.mailronav.cb.three")){
             diff = 3;
+            setKeyboard_status(guess_box);
         } else if(getIntent().hasExtra("com.mailronav.cb.four")){
             diff = 4;
+            setKeyboard_status(guess_box);
         } else if(getIntent().hasExtra("com.mailronav.cb.five")){
             diff = 5;
+            setKeyboard_status(guess_box);
         } else {
             diff = 6;
         }
+
+        setKeyboard_status(guess_box);
+        setKeyboard_status(guess_box);
 
         gbox = new GuessInputBox(myappctxt, guess_box, diff);
         gbox.build_guess_box();
@@ -127,96 +142,11 @@ public class game_screen extends AppCompatActivity {
         //ghist.CreateListView(game_screen.this, histbox);
 
 
-        done_btn.setOnClickListener(new View.OnClickListener() {
-            boolean check_game;
-            @Override
-            public void onClick(View v) {
-
-
-                if (done_btn.getText().equals("Play Again")) {
-                    hideSoftKeyboard(keyboard_btn);
-                    keyboard_status = false;
-                    Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
-                    startIntent.putExtra("com.mailronav.cb.playAgain", "");
-                    startActivity(startIntent);
-                    gameHasEnded = true;
-                }
-
-                if (guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0) != diff) {
-                    return;
-                }
-
-                combo_guess = "";
-                combo_guess = hintmngr.addToString(combo_guess);
-                combo_guess = guessmngr.addToString(combo_guess);
-
-                // Create a new row to be added to ScrollView.
-                // newrow should consist of the just completed guess and its evaluation
-                LinearLayout newrow = new LinearLayout(myctxt);
-                newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                newrow.setOrientation(LinearLayout.HORIZONTAL);
-
-                LinearLayout word_eval_layout = ghist.get_img_cb_eval(combo_guess, wgen, myctxt, ltrmngr, diff);
-                LinearLayout word_image_layout = new LinearLayout(myctxt);
-                word_image_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                word_image_layout.setOrientation(LinearLayout.HORIZONTAL);
-
-                word_image_layout = ltrmngr.get_img_word(combo_guess, ltrmngr, word_image_layout, myctxt);
-                gbox.reset_guess_box();
-                hintmngr.populate_gbox(gbox, ltrmngr);
-
-                if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
-                    try {
-                        newrow.addView(word_image_layout);
-                        newrow.addView(word_eval_layout);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                row.addView(newrow);
-                keyboard_btn.requestFocus();
-
-                if (wgen.evaluateGuess(combo_guess)[2] == diff) {
-                    done_btn.setText("Play Again");
-                    keyboard_btn.setText("Quit");
-                }
-                combo_guess = "";
-                guessmngr.reset();
-            }
-        });
-
-        hint_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hintPressed = true;
-                boolean[] filledPos = new boolean[diff];
-
-                guessmngr.getPositions(filledPos, true);
-                hintmngr.getPositions(filledPos, false);
-
-                int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
-                int pos = chrWithPos >> 8;
-                char letter = (char) (chrWithPos & 0xFF);
-
-                hintmngr.setLetter(pos, letter);
-                gbox.setImageAt(pos, ltrmngr.getLetter(letter));
-            }
-        });
-
-        keyboard_btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        // RDCHG
+        /* keyboard_btn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (keyboard_btn.getText().equals("Quit")) {
-                    hideSoftKeyboard(keyboard_btn);
-                    keyboard_status = false;
-                    Intent startIntent = new Intent(getApplicationContext(), game_2.class);
-                    startIntent.putExtra("com.mailronav.cb.quit", "");
-                    startActivity(startIntent);
-                    gameHasEnded = true;
-                } else {
-                    setKeyboard_status(keyboard_btn);
-                }
+                setKeyboard_status(keyboard_btn);
 
             }
         });
@@ -224,65 +154,85 @@ public class game_screen extends AppCompatActivity {
         keyboard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (keyboard_btn.getText().equals("Quit")) {
-                    Intent startIntent = new Intent(getApplicationContext(), game_2.class);
-                    startIntent.putExtra("com.mailronav.cb.quit", "");
-                    startActivity(startIntent);
-                } else {
-                    setKeyboard_status(keyboard_btn);
-                }
+                setKeyboard_status(keyboard_btn);
+            }
+        }); */
+
+        guess_box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setKeyboard_status(guess_box);
             }
         });
 
-        keyboard_btn.setOnKeyListener(new View.OnKeyListener() {
+        guess_box.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-                if (event.getAction() != KeyEvent.ACTION_UP)
+                if (event.getAction() != event.ACTION_UP)
                     return false;
 
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (keyCode == event.KEYCODE_ENTER) {
+                    done_btn_logic();
+                    count += 1;
+                    return true;
+                }
+
+                if (keyCode == event.KEYCODE_SLASH && event.isShiftPressed()) {
+                    hint_logic();
+                }
+
+                if (keyCode == event.KEYCODE_DEL) {
                     int delPos = guessmngr.delLast();
 
-                    if (delPos >= 0)
+                    if (delPos >= 0) {
                         gbox.deleteImageAt(delPos);
+                        gbox.setBorderAt(delPos);
+                    }
+                    return true;
 
                 } else if ((guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0)) == diff) {
-                    // Ignore characters if already at max acceptable
+                    return false;
                 } else {
                     int img_resid = 0;
                     char c = KSM.getCharForKeycode(keyCode, event);
                     img_resid = ltrmngr.get_imgres_for_key(keyCode);
 
-                    if (c != ' ') {
-                        if (hintmngr.hasChar(c) || guessmngr.hasChar(c)) {
-                            if (!ups.IsDupsOn()) {
-                                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
+                    if (!ups.IsGameOver()) {
+                        if (c != ' ') {
+                            if (hintmngr.hasChar(c) || guessmngr.hasChar(c)) {
+                                if (!ups.IsDupsOn()) {
+                                    // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
+                                } else {
+                                    int nextPos = guessmngr.getHighestPos() + 1;
+                                    nextPos = hintmngr.getNextPos(nextPos);
+                                    guessmngr.setLetter(nextPos, c);
+                                    gbox.removeBorderAt(nextPos);
+                                    gbox.setImageAt(nextPos, img_resid);
+                                }
                             } else {
                                 int nextPos = guessmngr.getHighestPos() + 1;
                                 nextPos = hintmngr.getNextPos(nextPos);
                                 guessmngr.setLetter(nextPos, c);
+                                gbox.removeBorderAt(nextPos);
                                 gbox.setImageAt(nextPos, img_resid);
                             }
-                        } else {
-                            int nextPos = guessmngr.getHighestPos() + 1;
-                            nextPos = hintmngr.getNextPos(nextPos);
-                            guessmngr.setLetter(nextPos, c);
-                            gbox.setImageAt(nextPos, img_resid);
                         }
+                    } else {
+                        // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
                     }
                 }
                 return true;
             }
         });
 
-        testing_dash.setText(word);
-
         /* LinearLayout shadow_guess_box = new MyLL(myctxt, guess_box, ltrmngr, guess, diff);
         shadow_guess_box.setFocusable(true);
         shadow_guess_box.setFocusableInTouchMode(true);
         shadow_guess_box.requestFocus();
          */
+
+        setKeyboard_status(guess_box);
 
     } // onCreate()
 
@@ -315,83 +265,6 @@ public class game_screen extends AppCompatActivity {
         bull_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bull_img.setImageResource(R.drawable.bulls_head);
         return bull_img;
-    }
-
-    public boolean hasGameEnded ()
-    {
-        return gameHasEnded;
-    }
-
-    public LinearLayout add_row() {
-        ImageView cow = new ImageView(myctxt);
-        ImageView bull = new ImageView(myctxt);
-        ImageView cow1 = new ImageView(myctxt);
-        ImageView bull1 = new ImageView(myctxt);
-        ImageView cow2 = new ImageView(myctxt);
-        ImageView bull2 = new ImageView(myctxt);
-
-        LinearLayout cows_layout = new LinearLayout(myctxt);
-        LinearLayout bulls_layout = new LinearLayout(myctxt);
-        LinearLayout final_layout = new LinearLayout(myctxt);
-
-
-        cow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        cow1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        cow2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        bull.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        bull1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        bull2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        ViewGroup.LayoutParams cow_layout = cow.getLayoutParams();
-        ViewGroup.LayoutParams cow1_layout = cow1.getLayoutParams();
-        ViewGroup.LayoutParams cow2_layout = cow2.getLayoutParams();
-        ViewGroup.LayoutParams bull_layout = bull.getLayoutParams();
-        ViewGroup.LayoutParams bull1_layout = bull1.getLayoutParams();
-        ViewGroup.LayoutParams bull2_layout = bull2.getLayoutParams();
-
-        bull_layout.height = 200;
-        bull_layout.width = 200;
-
-        bull1_layout.height = 200;
-        bull1_layout.width = 200;
-
-        bull2_layout.height = 200;
-        bull2_layout.width = 200;
-
-        cow_layout.height = 200;
-        cow_layout.width = 200;
-
-        cow1_layout.height = 200;
-        cow1_layout.width = 200;
-
-        cow2_layout.height = 200;
-        cow2_layout.width = 200;
-
-        bull.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bull1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bull2.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        cow.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        cow1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        cow2.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        bull.setImageResource(R.drawable.bulls_head);
-        bull1.setImageResource(R.drawable.bulls_head);
-        bull2.setImageResource(R.drawable.bulls_head);
-        cow.setImageResource(R.drawable.cow_head);
-        cow1.setImageResource(R.drawable.cow_head);
-        cow2.setImageResource(R.drawable.cow_head);
-
-        cows_layout.addView(cow);
-        cows_layout.addView(cow1);
-        cows_layout.addView(cow2);
-        bulls_layout.addView(bull);
-        bulls_layout.addView(bull1);
-        bulls_layout.addView(bull2);
-
-        final_layout.addView(cows_layout);
-        final_layout.addView(bulls_layout);
-
-        return final_layout;
     }
 
     public void setDebugBox(String s) {
@@ -434,13 +307,14 @@ public class game_screen extends AppCompatActivity {
         return String.valueOf(c);
     }
 
-    private void setKeyboard_status(View keyboard_btn) {
-        if(keyboard_status) {
-            hideSoftKeyboard(keyboard_btn);
-            keyboard_status = false;
+    private void setKeyboard_status(View v) {
+        v.requestFocus();
+        if(keyboard_visible) {
+            hideSoftKeyboard(v);
+            keyboard_visible = false;
         } else {
-            showSoftKeyboard(keyboard_btn);
-            keyboard_status = true;
+            showSoftKeyboard(v);
+            keyboard_visible = true;
             // dummy_input.performClick();
         }
 
@@ -504,5 +378,119 @@ public class game_screen extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         // InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         // imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+    public void done_btn_logic() {
+        if (guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0) != diff) {
+            return;
+        }
+
+        combo_guess = "";
+        combo_guess = hintmngr.addToString(combo_guess);
+        combo_guess = guessmngr.addToString(combo_guess);
+
+        // Create a new row to be added to ScrollView.
+        // newrow should consist of the just completed guess and its evaluation
+        LinearLayout newrow = new LinearLayout(myctxt);
+        newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        newrow.setOrientation(LinearLayout.HORIZONTAL);
+
+        LinearLayout word_and_eval_layout = new LinearLayout(myctxt);
+        newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        newrow.setOrientation(LinearLayout.HORIZONTAL);
+
+        ltrmngr.get_image_for_word(combo_guess, hintmngr, word_and_eval_layout, myctxt);
+        ImageView word_eval_spacing = new ImageView(myappctxt);
+        word_eval_spacing.setLayoutParams(LetterImageManager.getLayoutParams());
+        word_and_eval_layout.addView(word_eval_spacing);
+        ghist.get_img_cb_eval(combo_guess, wgen, myctxt, ltrmngr, diff, word_and_eval_layout);
+
+        newrow.addView(word_and_eval_layout);
+        gbox.reset_guess_box(true);
+        hintmngr.populate_gbox(gbox, ltrmngr);
+
+        /* if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
+            try {
+                newrow.addView(word_image_layout);
+                newrow.addView(word_eval_layout);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } */
+
+        row.addView(newrow, 0);
+
+        if (wgen.evaluateGuess(combo_guess)[2] == diff) {
+            hideSoftKeyboard(guess_box);
+            openDialog();
+            ups.SetGameOver(true);
+            gbox.reset_guess_box(false);
+        }
+        combo_guess = "";
+        guessmngr.reset();
+    }
+
+    public void play_again_logic () {
+        ups.SetGameOver(false);
+        hideSoftKeyboard(guess_box);
+        keyboard_visible = false;
+        Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
+        startIntent.putExtra("com.mailronav.cb.playAgain", "");
+        startActivity(startIntent);
+    }
+
+    public void quit_logic () {
+        hideSoftKeyboard(guess_box);
+        Intent intent = new Intent(getApplicationContext(), game_2.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+    }
+
+    public void hint_logic() {
+        hintPressed = true;
+        boolean[] filledPos = new boolean[diff];
+
+        guessmngr.getPositions(filledPos, true);
+        hintmngr.getPositions(filledPos, false);
+
+        int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
+        int pos = chrWithPos >> 8;
+        char letter = (char) (chrWithPos & 0xFF);
+
+        hintmngr.setLetter(pos, letter);
+        gbox.setImageAt(pos, ltrmngr.getHintLetter(letter));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.Play_again:
+                play_again_logic();
+                break;
+            case R.id.Quit:
+                quit_logic();
+                break;
+            case R.id.Hint:
+                hint_logic();
+                break;
+            case R.id.Keyboard:
+                setKeyboard_status(guess_box);
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    public void openDialog() {
+        EndGameDialogue endGameDialogue = new EndGameDialogue(count);
+        endGameDialogue.show(getSupportFragmentManager(), "end game dialogue");
     }
 }

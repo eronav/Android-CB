@@ -110,7 +110,7 @@ public class HintManager {
         int numhints = 0;
         for (int i=0; i < diff; i++) {
             if (hasCharAt(i)) {
-                gbox.setImageAt(i, lim.getLetter(hintPos[i]));
+                gbox.setImageAt(i, lim.getHintLetter(hintPos[i]));
                 numhints++;
             }
         }

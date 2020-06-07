@@ -142,14 +142,10 @@ public class GuessHistory {
 
     }
 
-    public LinearLayout get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff) {
+    public LinearLayout get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
         int[] result = wgen.evaluateGuess(guess);
         int cow = result[1];
         int bull = result[2];
-        LinearLayout cb_eval = new LinearLayout(myctxt);
-        cb_eval.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        cb_eval.setOrientation(LinearLayout.HORIZONTAL);
 
         if(bull == diff) {
             mult_animal_img(1, R.drawable.firework, cb_eval, myctxt);
@@ -257,11 +253,8 @@ public class GuessHistory {
     public void mult_animal_img(int count, @DrawableRes int img_id, LinearLayout layout, Context myctxt) {
         for (int i = 0; i < count; i++) {
             ImageView animal_img = new ImageView(myctxt);
-            LinearLayout.LayoutParams animal_layout_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            animal_img.setLayoutParams(animal_layout_params);
-            animal_layout_params.height = 60;
-            animal_layout_params.width = 60;
-            animal_layout_params.setMargins(10,10, 10, 10);
+            animal_img.setLayoutParams(LetterImageManager.getLayoutParams());
+            // animal_img.setBackgroundDrawable(new Border(0xffff0000, 50));
             animal_img.setImageResource(img_id);
             layout.addView(animal_img);
         }

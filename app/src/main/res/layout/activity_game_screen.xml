@@ -8,98 +8,40 @@
     android:background="@drawable/farm_backgnd_edited"
     android:inputType="textNoSuggestions|textVisiblePassword">
 
-    <TextView
-        android:id="@+id/word"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="133dp"
-        android:layout_marginLeft="133dp"
-        android:layout_marginEnd="174dp"
-        android:layout_marginRight="174dp"
-        android:text="TextView"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.949" />
-
-    <Button
-        android:id="@+id/done_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:layout_marginBottom="360dp"
-        android:text="Done"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.645"
-        app:layout_constraintStart_toEndOf="@+id/keyboard"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:id="@+id/history"
-        android:layout_width="309dp"
+        android:layout_width="300dp"
         android:layout_height="189dp"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/guess_box"
-        android:layout_width="309dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="51dp"
         android:layout_marginLeft="51dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="51dp"
         android:layout_marginRight="51dp"
+        android:clickable="true"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/history"></LinearLayout>
-
-    <Button
-        android:id="@+id/keyboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginLeft="158dp"
-        android:layout_marginTop="39dp"
-        android:layout_marginEnd="22dp"
-        android:layout_marginRight="22dp"
-        android:layout_marginBottom="296dp"
-        android:text="Keyboard"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/word"
-        app:layout_constraintEnd_toStartOf="@+id/done_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box" />
-
-    <ImageButton
-        android:id="@+id/hint_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="51dp"
-        android:layout_marginLeft="51dp"
-        android:layout_marginTop="43dp"
-        android:layout_marginEnd="65dp"
-        android:layout_marginRight="65dp"
-        android:background="#00000000"
-        app:layout_constraintEnd_toStartOf="@+id/keyboard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guess_box"
-        app:srcCompat="@drawable/hint_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
