@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class GuessInputBox {
     private int diff;
@@ -25,6 +26,13 @@ public class GuessInputBox {
             img_layout.width = 120;
             img_layout.setMargins(0,0,4,0);
             v.setLayoutParams(img_layout);
+            v.setClickable(true);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(appctxt, "View is clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
             thebox.addView(v);
         }
     }
