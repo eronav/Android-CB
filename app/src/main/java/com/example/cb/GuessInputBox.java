@@ -6,10 +6,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class GuessInputBox {
     private int diff;
     private Context appctxt;
     private LinearLayout thebox;
+    private ImageView[] boxViews;
+    private int userSelectedBoxPosition = 7;
 
     GuessInputBox(Context appctxt, View v, int diff) {
         this.diff = diff;
@@ -18,27 +22,45 @@ public class GuessInputBox {
     }
 
     public void build_guess_box () {
+        boxViews = new ImageView[diff];
         for (int i = 0; i < diff; i++) {
             ImageView v = new ImageView(appctxt);
             LinearLayout.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             v.setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
             img_layout.height = 120;
             img_layout.width = 120;
-            img_layout.setMargins(0,0,4,0);
+            img_layout.setMargins(0,0,8,0);
             v.setLayoutParams(img_layout);
             v.setClickable(true);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(appctxt, "View is clicked", Toast.LENGTH_SHORT).show();
+                    int i;
+                    for (i = 0; i < diff; i++) {
+                        if (boxViews[i] == v) {
+                            userSelectedBoxPosition = i;
+                            break;
+                        }
+                    }
+                    Toast.makeText(appctxt, String.valueOf(i), Toast.LENGTH_SHORT).show();
                 }
             });
             thebox.addView(v);
+            boxViews[i] = v;
         }
+    }
+
+    public int getUserSelectedPos (boolean reset) {
+        int pos = userSelectedBoxPosition;
+        if (reset) {
+            userSelectedBoxPosition = 7;
+        }
+        return pos;
     }
 
     public void reset_guess_box(boolean rebuild) {
         thebox.removeAllViews();
+        Arrays.fill(boxViews, null);
         if (rebuild)
             build_guess_box();
     }

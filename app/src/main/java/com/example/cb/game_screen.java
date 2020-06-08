@@ -36,7 +36,6 @@ public class game_screen extends AppCompatActivity{
     Random myrand;
     WordGenerator wgen;
     UserPrefs ups;
-    HintManager hintmngr;
     HintManager guessmngr;
     GuessHistory ghist;
     LetterImageManager ltrmngr;
@@ -52,7 +51,6 @@ public class game_screen extends AppCompatActivity{
     boolean[] posHasCome;
     boolean hintPressed;
     String hasTyped;
-    GuessInputBox GIB;
     KeyStrokeManager KSM;
     Button keyboard_btn;
     public int count = 0;
@@ -102,17 +100,15 @@ public class game_screen extends AppCompatActivity{
         String dash = "";
         if(getIntent().hasExtra("com.mailronav.cb.three")){
             diff = 3;
-            setKeyboard_status(guess_box);
         } else if(getIntent().hasExtra("com.mailronav.cb.four")){
             diff = 4;
-            setKeyboard_status(guess_box);
         } else if(getIntent().hasExtra("com.mailronav.cb.five")){
             diff = 5;
-            setKeyboard_status(guess_box);
         } else {
             diff = 6;
         }
 
+        setKeyboard_status(guess_box);
         setKeyboard_status(guess_box);
         setKeyboard_status(guess_box);
 
@@ -135,10 +131,8 @@ public class game_screen extends AppCompatActivity{
 
 
         ghist = new GuessHistory();
-        hintmngr = new HintManager(diff);
         guessmngr = new HintManager(diff);
 
-        GIB = new GuessInputBox(myappctxt, guess_box, diff);
         //ghist.CreateListView(game_screen.this, histbox);
 
 
@@ -178,48 +172,65 @@ public class game_screen extends AppCompatActivity{
                     return true;
                 }
 
-                if (keyCode == event.KEYCODE_SLASH && event.isShiftPressed()) {
-                    hint_logic();
-                }
-
-                if (keyCode == event.KEYCODE_DEL) {
-                    int delPos = guessmngr.delLast();
+                if (keyCode == event.KEYCODE_DEL && event.isShiftPressed()) {
+                    int delPos = guessmngr.delLastHint();
 
                     if (delPos >= 0) {
                         gbox.deleteImageAt(delPos);
                         gbox.setBorderAt(delPos);
                     }
                     return true;
+                }
 
-                } else if ((guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0)) == diff) {
+                if (keyCode == event.KEYCODE_SLASH && event.isShiftPressed()) {
+                    hint_logic();
+                }
+
+                if (keyCode == event.KEYCODE_DEL) {
+                    int delPos;
+
+                    if (gbox.getUserSelectedPos(false) == 7) {
+                        delPos = guessmngr.delLast();
+                    } else {
+                        delPos = gbox.getUserSelectedPos(false);
+                    }
+
+                    if (delPos >= 0) {
+                        gbox.deleteImageAt(delPos);
+                        gbox.setBorderAt(delPos);
+                    }
+
+                    return true;
+
+                } else if ((guessmngr.numFilledPos(0)) == diff) {
                     return false;
                 } else {
+                    ////////////////////// we have a number or an alphabet eeeeoooooeeeee!
                     int img_resid = 0;
                     char c = KSM.getCharForKeycode(keyCode, event);
                     img_resid = ltrmngr.get_imgres_for_key(keyCode);
 
                     if (!ups.IsGameOver()) {
-                        if (c != ' ') {
-                            if (hintmngr.hasChar(c) || guessmngr.hasChar(c)) {
-                                if (!ups.IsDupsOn()) {
-                                    // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
+                        if (c != ' ') { // GOTCHA, a valid character
+                            if (!guessmngr.hasCharacter(c) || ups.IsDupsOn()) {
+                                // either not dup or dup is on
+                                int nextPos;
+                                if (gbox.getUserSelectedPos(false) == 7) {
+                                    nextPos = guessmngr.getNextAvailPos();
                                 } else {
-                                    int nextPos = guessmngr.getHighestPos() + 1;
-                                    nextPos = hintmngr.getNextPos(nextPos);
-                                    guessmngr.setLetter(nextPos, c);
-                                    gbox.removeBorderAt(nextPos);
-                                    gbox.setImageAt(nextPos, img_resid);
+                                    nextPos = gbox.getUserSelectedPos(true);
                                 }
-                            } else {
-                                int nextPos = guessmngr.getHighestPos() + 1;
-                                nextPos = hintmngr.getNextPos(nextPos);
-                                guessmngr.setLetter(nextPos, c);
+                                guessmngr.setGuess(nextPos, c);
                                 gbox.removeBorderAt(nextPos);
                                 gbox.setImageAt(nextPos, img_resid);
+                            } else {
+                                // we have duplicate character; reject if duplicate is not allowed
+                                /* if (!ups.IsDupsOn()) {
+                                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)> */
                             }
                         }
                     } else {
-                        // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)
+                        // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)>
                     }
                 }
                 return true;
@@ -381,13 +392,11 @@ public class game_screen extends AppCompatActivity{
     }
 
     public void done_btn_logic() {
-        if (guessmngr.num_of_hints(0) + hintmngr.num_of_hints(0) != diff) {
+        if (guessmngr.numFilledPos(0) != diff) {
             return;
         }
 
-        combo_guess = "";
-        combo_guess = hintmngr.addToString(combo_guess);
-        combo_guess = guessmngr.addToString(combo_guess);
+        combo_guess = guessmngr.makeString();
 
         // Create a new row to be added to ScrollView.
         // newrow should consist of the just completed guess and its evaluation
@@ -399,7 +408,7 @@ public class game_screen extends AppCompatActivity{
         newrow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         newrow.setOrientation(LinearLayout.HORIZONTAL);
 
-        ltrmngr.get_image_for_word(combo_guess, hintmngr, word_and_eval_layout, myctxt);
+        ltrmngr.get_image_for_word(combo_guess, guessmngr, word_and_eval_layout, myctxt);
         ImageView word_eval_spacing = new ImageView(myappctxt);
         word_eval_spacing.setLayoutParams(LetterImageManager.getLayoutParams());
         word_and_eval_layout.addView(word_eval_spacing);
@@ -407,7 +416,7 @@ public class game_screen extends AppCompatActivity{
 
         newrow.addView(word_and_eval_layout);
         gbox.reset_guess_box(true);
-        hintmngr.populate_gbox(gbox, ltrmngr);
+        guessmngr.populate_gbox(gbox, ltrmngr);
 
         /* if (! redesign_images(newrow, word_image_layout, word_eval_layout)) {
             try {
@@ -428,6 +437,7 @@ public class game_screen extends AppCompatActivity{
         }
         combo_guess = "";
         guessmngr.reset();
+        gbox.getUserSelectedPos(true);
     }
 
     public void play_again_logic () {
@@ -451,15 +461,15 @@ public class game_screen extends AppCompatActivity{
         hintPressed = true;
         boolean[] filledPos = new boolean[diff];
 
-        guessmngr.getPositions(filledPos, true);
-        hintmngr.getPositions(filledPos, false);
+        guessmngr.getAllPositions(filledPos);
 
         int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
         int pos = chrWithPos >> 8;
         char letter = (char) (chrWithPos & 0xFF);
 
-        hintmngr.setLetter(pos, letter);
+        guessmngr.setHint(pos, letter);
         gbox.setImageAt(pos, ltrmngr.getHintLetter(letter));
+        gbox.removeBorderAt(pos);
     }
 
     @Override

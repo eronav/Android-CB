@@ -183,10 +183,11 @@ public class LetterImageManager {
 
 
     // Given a string, it gets the images for each letter and populates the passed-in LinearLayout
-    public LinearLayout get_image_for_word(String guess, HintManager hintmngr, LinearLayout ll, Context myctxt) {
+    public LinearLayout get_image_for_word(String guess, HintManager guessmngr, LinearLayout ll, Context myctxt) {
         ImageView img;
         for(int i = 0; i < guess.length(); i++) {
-            if (hintmngr.hasCharAt(i)) {
+            // If there is a hint, use the Hint character set else use the Regular character set
+            if (guessmngr.hasHintAt(i)) {
                 img = get_image_for_a_hint(myctxt, guess.charAt(i));
             } else {
                 img = get_image_for_a_letter(myctxt, guess.charAt(i));

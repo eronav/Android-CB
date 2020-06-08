@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".options_activity"></activity>
         <activity android:name=".design_layout" />
-        <activity android:name=".play_again" />
         <activity android:name=".game_screen" />
         <activity android:name=".help_activity" />
         <activity android:name=".play_game_level" />
