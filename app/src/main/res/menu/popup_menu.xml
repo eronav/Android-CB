@@ -4,8 +4,10 @@
         android:title="Play Again" />
     <item android:id="@+id/Quit"
         android:title="Quit" />
-    <item android:id="@+id/Hint"
+    <item android:id="@+id/Help"
+        android:title="Help" />
+    <!--item android:id="@+id/Hint"
         android:title="Hint" />
     <item android:id="@+id/Keyboard"
-        android:title="Keyboard" />
+        android:title="Keyboard" /-->
 </menu>

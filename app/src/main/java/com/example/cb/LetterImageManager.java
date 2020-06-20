@@ -110,7 +110,7 @@ public class LetterImageManager {
     }
 
     public int getHintLetter(char chr) {
-        int chr_int = (int)chr;
+        int chr_int = chr;
         if (chr_int >= int_a && chr_int <= int_z) {
             return HintLetterArray[chr_int - int_a];
         }

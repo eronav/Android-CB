@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -52,8 +53,67 @@ public class game_screen extends AppCompatActivity{
     boolean hintPressed;
     String hasTyped;
     KeyStrokeManager KSM;
-    Button keyboard_btn;
     public int count = 0;
+
+    public ImageView keyboardButton1;
+
+    public ImageView keyboardButton2;
+
+    public ImageView keyboardButton3;
+
+    public ImageView keyboardButton4;
+
+    public ImageView keyboardButton5;
+
+    public ImageView keyboardButton6;
+
+    public ImageView keyboardButton7;
+
+    public ImageView keyboardButton8;
+
+    public ImageView keyboardButton9;
+
+    public ImageView keyboardButton10;
+
+    public ImageView keyboardButton11;
+
+    public ImageView keyboardButton12;
+
+    public ImageView keyboardButton13;
+
+    public ImageView keyboardButton14;
+
+    public ImageView keyboardButton15;
+
+    public ImageView keyboardButton16;
+
+    public ImageView keyboardButton17;
+
+    public ImageView keyboardButton18;
+
+    public ImageView keyboardButton19;
+
+    public ImageView keyboardButton20;
+
+    public ImageView keyboardButton21;
+
+    public ImageView keyboardButton22;
+
+    public ImageView keyboardButton23;
+
+    public ImageView keyboardButton24;
+
+    public ImageView keyboardButton25;
+
+    public ImageView keyboardButton26;
+
+    public ImageView deleteImage;
+    public ImageView deleteImageBackground;
+
+    public ImageView submitImage;
+    public ImageView submitImageBackground;
+
+    public ImageView hintImage;
 
 
 
@@ -108,6 +168,98 @@ public class game_screen extends AppCompatActivity{
             diff = 6;
         }
 
+        keyboardButton1 = findViewById(R.id.imageView1);
+        keyboardButton1.setClickable(true);
+
+        keyboardButton2 = findViewById(R.id.imageView2);
+        keyboardButton2.setClickable(true);
+
+        keyboardButton3 = findViewById(R.id.imageView3);
+        keyboardButton3.setClickable(true);
+
+        keyboardButton4 = findViewById(R.id.imageView4);
+        keyboardButton4.setClickable(true);
+
+        keyboardButton5 = findViewById(R.id.imageView5);
+        keyboardButton5.setClickable(true);
+
+        keyboardButton6 = findViewById(R.id.imageView6);
+        keyboardButton6.setClickable(true);
+
+        keyboardButton7 = findViewById(R.id.imageView7);
+        keyboardButton7.setClickable(true);
+
+        keyboardButton8 = findViewById(R.id.imageView8);
+        keyboardButton8.setClickable(true);
+
+        keyboardButton9 = findViewById(R.id.imageView9);
+        keyboardButton9.setClickable(true);
+
+        keyboardButton10 = findViewById(R.id.imageView10);
+        keyboardButton10.setClickable(true);
+
+        keyboardButton11 = findViewById(R.id.imageView11);
+        keyboardButton11.setClickable(true);
+
+        keyboardButton12 = findViewById(R.id.imageView12);
+        keyboardButton12.setClickable(true);
+
+        keyboardButton13 = findViewById(R.id.imageView13);
+        keyboardButton13.setClickable(true);
+
+        keyboardButton14 = findViewById(R.id.imageView14);
+        keyboardButton14.setClickable(true);
+
+        keyboardButton15 = findViewById(R.id.imageView15);
+        keyboardButton15.setClickable(true);
+
+        keyboardButton16 = findViewById(R.id.imageView16);
+        keyboardButton16.setClickable(true);
+
+        keyboardButton17 = findViewById(R.id.imageView17);
+        keyboardButton17.setClickable(true);
+
+        keyboardButton18 = findViewById(R.id.imageView18);
+        keyboardButton18.setClickable(true);
+
+        keyboardButton19 = findViewById(R.id.imageView19);
+        keyboardButton19.setClickable(true);
+
+        keyboardButton20 = findViewById(R.id.imageView20);
+        keyboardButton20.setClickable(true);
+
+        keyboardButton21 = findViewById(R.id.imageView21);
+        keyboardButton21.setClickable(true);
+
+        keyboardButton22 = findViewById(R.id.imageView22);
+        keyboardButton22.setClickable(true);
+
+        keyboardButton23 = findViewById(R.id.imageView23);
+        keyboardButton23.setClickable(true);
+
+        keyboardButton24 = findViewById(R.id.imageView24);
+        keyboardButton24.setClickable(true);
+
+        keyboardButton25 = findViewById(R.id.imageView25);
+        keyboardButton25.setClickable(true);
+
+        keyboardButton26 = findViewById(R.id.imageView26);
+        keyboardButton26.setClickable(true);
+
+        deleteImage = findViewById(R.id.deleteView);
+        deleteImage.setClickable(true);
+        deleteImageBackground = findViewById(R.id.deleteViewBackground);
+        deleteImageBackground.setClickable(true);
+
+        submitImage = findViewById(R.id.sendView);
+        submitImage.setClickable(true);
+        submitImageBackground = findViewById(R.id.sendViewBackground);
+        submitImageBackground.setClickable(true);
+
+        hintImage = findViewById(R.id.questionImage);
+        hintImage.setClickable(true);
+
+
         setKeyboard_status(guess_box);
         setKeyboard_status(guess_box);
         setKeyboard_status(guess_box);
@@ -116,6 +268,7 @@ public class game_screen extends AppCompatActivity{
         gbox.build_guess_box();
         KSM = new KeyStrokeManager();
         ups = GameEnvironment.ups;
+
 
         posHasCome = new boolean[diff];
 
@@ -152,87 +305,346 @@ public class game_screen extends AppCompatActivity{
             }
         }); */
 
+        /*
+        // puts the keyboard up/down
         guess_box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setKeyboard_status(guess_box);
             }
+        }); */
+
+        keyboardButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton1.getResources().getResourceEntryName(keyboardButton1.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
         });
 
-        guess_box.setOnKeyListener(new View.OnKeyListener() {
+
+        keyboardButton2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            public void onClick(View v) {
+                String idString = keyboardButton2.getResources().getResourceEntryName(keyboardButton2.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                if (event.getAction() != event.ACTION_UP)
-                    return false;
 
-                if (keyCode == event.KEYCODE_ENTER) {
-                    done_btn_logic();
-                    count += 1;
-                    return true;
-                }
+        keyboardButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton3.getResources().getResourceEntryName(keyboardButton3.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                if (keyCode == event.KEYCODE_DEL && event.isShiftPressed()) {
-                    int delPos = guessmngr.delLastHint();
 
-                    if (delPos >= 0) {
-                        gbox.deleteImageAt(delPos);
-                        gbox.setBorderAt(delPos);
-                    }
-                    return true;
-                }
+        keyboardButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton4.getResources().getResourceEntryName(keyboardButton4.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                if (keyCode == event.KEYCODE_SLASH && event.isShiftPressed()) {
-                    hint_logic();
-                }
 
-                if (keyCode == event.KEYCODE_DEL) {
-                    int delPos;
+        keyboardButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton5.getResources().getResourceEntryName(keyboardButton5.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                    if (gbox.getUserSelectedPos(false) == 7) {
-                        delPos = guessmngr.delLast();
-                    } else {
-                        delPos = gbox.getUserSelectedPos(false);
-                    }
 
-                    if (delPos >= 0) {
-                        gbox.deleteImageAt(delPos);
-                        gbox.setBorderAt(delPos);
-                    }
+        keyboardButton6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton6.getResources().getResourceEntryName(keyboardButton6.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                    return true;
 
-                } else if ((guessmngr.numFilledPos(0)) == diff) {
-                    return false;
-                } else {
-                    ////////////////////// we have a number or an alphabet eeeeoooooeeeee!
-                    int img_resid = 0;
-                    char c = KSM.getCharForKeycode(keyCode, event);
-                    img_resid = ltrmngr.get_imgres_for_key(keyCode);
+        keyboardButton7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton7.getResources().getResourceEntryName(keyboardButton7.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
 
-                    if (!ups.IsGameOver()) {
-                        if (c != ' ') { // GOTCHA, a valid character
-                            if (!guessmngr.hasCharacter(c) || ups.IsDupsOn()) {
-                                // either not dup or dup is on
-                                int nextPos;
-                                if (gbox.getUserSelectedPos(false) == 7) {
-                                    nextPos = guessmngr.getNextAvailPos();
-                                } else {
-                                    nextPos = gbox.getUserSelectedPos(true);
-                                }
-                                guessmngr.setGuess(nextPos, c);
-                                gbox.removeBorderAt(nextPos);
-                                gbox.setImageAt(nextPos, img_resid);
-                            } else {
-                                // we have duplicate character; reject if duplicate is not allowed
-                                /* if (!ups.IsDupsOn()) {
-                                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)> */
-                            }
-                        }
-                    } else {
-                        // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)>
-                    }
-                }
+
+        keyboardButton8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton8.getResources().getResourceEntryName(keyboardButton8.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton9.getResources().getResourceEntryName(keyboardButton9.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton10.getResources().getResourceEntryName(keyboardButton10.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton11.getResources().getResourceEntryName(keyboardButton11.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton12.getResources().getResourceEntryName(keyboardButton12.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton13.getResources().getResourceEntryName(keyboardButton13.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton14.getResources().getResourceEntryName(keyboardButton14.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton15.getResources().getResourceEntryName(keyboardButton15.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton16.getResources().getResourceEntryName(keyboardButton16.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton17.getResources().getResourceEntryName(keyboardButton17.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton18.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton18.getResources().getResourceEntryName(keyboardButton18.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton19.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton19.getResources().getResourceEntryName(keyboardButton19.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton20.getResources().getResourceEntryName(keyboardButton20.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton21.getResources().getResourceEntryName(keyboardButton21.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton22.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton22.getResources().getResourceEntryName(keyboardButton22.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton23.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton23.getResources().getResourceEntryName(keyboardButton23.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton24.getResources().getResourceEntryName(keyboardButton24.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton25.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton25.getResources().getResourceEntryName(keyboardButton25.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+
+        keyboardButton26.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idString = keyboardButton26.getResources().getResourceEntryName(keyboardButton26.getId());
+                int newKeyCode = getKeyCodeFromId(idString);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+                onKeyLogic(event, newKeyCode);
+            }
+        });
+
+        submitImageBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                done_btn_logic();
+            }
+        });
+        submitImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                done_btn_logic();
+            }
+        });
+
+        deleteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_logic(false);
+            }
+        });
+        deleteImageBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_logic(false);
+            }
+        });
+
+        deleteImageBackground.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                delete_logic(true);
+                return true;
+            }
+        });
+
+        deleteImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                delete_logic(true);
+                return true;
+            }
+        });
+
+        hintImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                hint_logic();
                 return true;
             }
         });
@@ -428,6 +840,7 @@ public class game_screen extends AppCompatActivity{
         } */
 
         row.addView(newrow, 0);
+        count += 1;
 
         if (wgen.evaluateGuess(combo_guess)[2] == diff) {
             hideSoftKeyboard(guess_box);
@@ -449,6 +862,68 @@ public class game_screen extends AppCompatActivity{
         startActivity(startIntent);
     }
 
+    public boolean onKeyLogic (KeyEvent event, int keyCode) {
+        if (event.getAction() != event.ACTION_UP)
+            return false;
+
+        if (keyCode == event.KEYCODE_ENTER) {
+            done_btn_logic();
+            return true;
+        }
+
+        if (keyCode == event.KEYCODE_DEL && event.isShiftPressed()) {
+            int delPos = guessmngr.delLastHint();
+
+            if (delPos >= 0) {
+                gbox.deleteImageAt(delPos);
+                gbox.setBorderAt(delPos);
+            }
+            return true;
+        }
+
+        if (keyCode == event.KEYCODE_SLASH && event.isShiftPressed()) {
+            hint_logic();
+        }
+
+        if (keyCode == event.KEYCODE_DEL) {
+            delete_logic(false);
+
+            return true;
+
+        } else if ((guessmngr.numFilledPos(0)) == diff) {
+            return false;
+        } else {
+            ////////////////////// we have a number or an alphabet eeeeoooooeeeee!
+            int img_resid = 0;
+            char c = KSM.getCharForKeycode(keyCode, event);
+            img_resid = ltrmngr.get_imgres_for_key(keyCode);
+
+            if (!ups.IsGameOver()) {
+                if (c != ' ') { // GOTCHA, a valid character
+                    if (!guessmngr.hasCharacter(c) || ups.IsDupsOn()) {
+                        // either not dup or dup is on
+                        int nextPos;
+                        if (gbox.getUserSelectedPos(false) == 7) {
+                            nextPos = guessmngr.getNextAvailPos();
+                        } else {
+                            nextPos = gbox.getUserSelectedPos(true);
+                        }
+                        guessmngr.setGuess(nextPos, c);
+                        gbox.removeBorderAt(nextPos);
+                        gbox.setImageAt(nextPos, img_resid);
+                    } else {
+                        // we have duplicate character; reject if duplicate is not allowed
+                                /* if (!ups.IsDupsOn()) {
+                                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)> */
+                    }
+                }
+            } else {
+                // Ignore all possible outcomes and fly away to another world like Dr. Strange! :)>
+            }
+        }
+        return true;
+    }
+
     public void quit_logic () {
         hideSoftKeyboard(guess_box);
         Intent intent = new Intent(getApplicationContext(), game_2.class);
@@ -457,11 +932,52 @@ public class game_screen extends AppCompatActivity{
         startActivity(intent);
     }
 
+    public void delete_logic(boolean delHint) {
+        int delPos;
+        int userPos = gbox.getUserSelectedPos(false);
+
+        if (delHint) {
+            if (userPos != 7) {
+                delPos = userPos;
+                guessmngr.deleteHint(userPos);
+            } else {
+                // ignore
+                delPos = -1;
+            }
+        } else {
+            // Deleting a letter - do so at the user-specified position or the last one
+            if (userPos == 7) {
+                delPos = guessmngr.delLast();
+            } else {
+                guessmngr.deleteLetter(userPos);
+                delPos = userPos;
+            }
+        }
+
+        // Reset the image at the deleted position
+        if (delPos >= 0) {
+            gbox.deleteImageAt(delPos);
+            gbox.setBorderAt(delPos);
+        }
+    }
+
     public void hint_logic() {
         hintPressed = true;
         boolean[] filledPos = new boolean[diff];
 
         guessmngr.getAllPositions(filledPos);
+
+        int filledCount = 0;
+        for (int i = 0; i < diff; i++) {
+            if (filledPos[i] == true) {
+                filledCount += 1;
+            }
+        }
+
+        if (filledCount == diff) {
+            Toast.makeText(myctxt, "No hint position available", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         int chrWithPos = wgen.getHint(word, filledPos, diff, posHasCome);
         int pos = chrWithPos >> 8;
@@ -479,6 +995,65 @@ public class game_screen extends AppCompatActivity{
         return true;
     }
 
+    public int getKeyCodeFromId (String ID) {
+        switch (ID) {
+            case "imageView1":
+                return KeyEvent.KEYCODE_Q;
+            case "imageView2":
+                return KeyEvent.KEYCODE_W;
+            case "imageView3":
+                return KeyEvent.KEYCODE_E;
+            case "imageView4":
+                return KeyEvent.KEYCODE_R;
+            case "imageView5":
+                return KeyEvent.KEYCODE_T;
+            case "imageView6":
+                return KeyEvent.KEYCODE_Y;
+            case "imageView7":
+                return KeyEvent.KEYCODE_U;
+            case "imageView8":
+                return KeyEvent.KEYCODE_I;
+            case "imageView9":
+                return KeyEvent.KEYCODE_O;
+            case "imageView10":
+                return KeyEvent.KEYCODE_P;
+            case "imageView11":
+                return KeyEvent.KEYCODE_A;
+            case "imageView12":
+                return KeyEvent.KEYCODE_S;
+            case "imageView13":
+                return KeyEvent.KEYCODE_D;
+            case "imageView14":
+                return KeyEvent.KEYCODE_F;
+            case "imageView15":
+                return KeyEvent.KEYCODE_G;
+            case "imageView16":
+                return KeyEvent.KEYCODE_H;
+            case "imageView17":
+                return KeyEvent.KEYCODE_J;
+            case "imageView18":
+                return KeyEvent.KEYCODE_K;
+            case "imageView19":
+                return KeyEvent.KEYCODE_L;
+            case "imageView20":
+                return KeyEvent.KEYCODE_Z;
+            case "imageView21":
+                return KeyEvent.KEYCODE_X;
+            case "imageView22":
+                return KeyEvent.KEYCODE_C;
+            case "imageView23":
+                return KeyEvent.KEYCODE_V;
+            case "imageView24":
+                return KeyEvent.KEYCODE_B;
+            case "imageView25":
+                return KeyEvent.KEYCODE_N;
+            case "imageView26":
+                return KeyEvent.KEYCODE_M;
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -488,11 +1063,10 @@ public class game_screen extends AppCompatActivity{
             case R.id.Quit:
                 quit_logic();
                 break;
-            case R.id.Hint:
-                hint_logic();
-                break;
-            case R.id.Keyboard:
-                setKeyboard_status(guess_box);
+            case R.id.Help:
+                Intent startIntent = new Intent(myctxt, help_activity.class);
+                startIntent.putExtra("com.mailronav.cb.Help", "");
+                startActivity(startIntent);
             default:
                 return false;
         }

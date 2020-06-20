@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="hintColorGame">#000000</color>
     <color name="transparentColor">#00000000</color>
+    <color name="selectedBoxColor">#0000FF</color>
 </resources>

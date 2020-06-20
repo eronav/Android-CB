@@ -21,6 +21,9 @@ public class help_activity extends AppCompatActivity {
         if (getIntent().hasExtra("com.mailronav.cb.A")){
 
         }
+        if (getIntent().hasExtra("com.mailronav.cb.Help")) {
+
+        }
         bck_btn_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
