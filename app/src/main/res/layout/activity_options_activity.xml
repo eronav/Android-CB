@@ -16,7 +16,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/progress_horizontal" />
 
     <ImageButton
@@ -35,41 +35,36 @@
         app:layout_constraintVertical_bias="0.074"
         app:srcCompat="?attr/homeAsUpIndicator" />
 
-    <Switch
-        android:id="@+id/musicSwitch"
-        android:layout_width="144dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="73dp"
-        android:layout_marginLeft="73dp"
-        android:layout_marginTop="157dp"
-        android:layout_marginEnd="194dp"
-        android:layout_marginRight="194dp"
-        android:layout_marginBottom="457dp"
-        android:text="Music"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:layout_constraintVertical_bias="1.0" />
+    <RelativeLayout
+        android:id="@+id/option_list"
+        android:layout_width="match_parent"
+        android:layout_marginTop="160dp"
+        android:layout_height="match_parent">
 
-    <Switch
-        android:id="@+id/doubleSwitch"
-        android:layout_width="144dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="73dp"
-        android:layout_marginLeft="73dp"
-        android:layout_marginEnd="194dp"
-        android:layout_marginRight="194dp"
-        android:layout_marginBottom="356dp"
-        android:text="Double Letters"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:layout_constraintVertical_bias="0.918" />
+        <Switch
+            android:id="@+id/musicSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:text="Music"
+            android:textSize="20sp" />
+
+        <Switch
+            android:id="@+id/doubleSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/musicSwitch"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:text="Double Letters"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

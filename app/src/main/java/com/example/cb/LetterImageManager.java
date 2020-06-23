@@ -10,6 +10,8 @@ public class LetterImageManager {
     public int[] NumberArray = new int[10];
     public int[] HintLetterArray = new int[26];
     public int[] HintNumberArray = new int[10];
+    public int[] BlackLetterArray = new int[26];
+    public int[] BlackNumberArray = new int[10];
     private int int_a = (int) 'a';
     private int int_z = (int) 'z';
     private int int_0 = (int) '0';
@@ -92,6 +94,45 @@ public class LetterImageManager {
         HintNumberArray[7] = R.drawable.hint_letter_7;
         HintNumberArray[8] = R.drawable.hint_letter_8;
         HintNumberArray[9] = R.drawable.hint_letter_9;
+
+        BlackLetterArray[0] = R.drawable.black_letter_a;
+        BlackLetterArray[1] = R.drawable.black_letter_b;
+        BlackLetterArray[2] = R.drawable.black_letter_c;
+        BlackLetterArray[3] = R.drawable.black_letter_d;
+        BlackLetterArray[4] = R.drawable.black_letter_e;
+        BlackLetterArray[5] = R.drawable.black_letter_f;
+        BlackLetterArray[6] = R.drawable.black_letter_g;
+        BlackLetterArray[7] = R.drawable.black_letter_h;
+        BlackLetterArray[8] = R.drawable.black_letter_i;
+        BlackLetterArray[9] = R.drawable.black_letter_j;
+        BlackLetterArray[10] = R.drawable.black_letter_k;
+        BlackLetterArray[11] = R.drawable.black_letter_l;
+        BlackLetterArray[12] = R.drawable.black_letter_m;
+        BlackLetterArray[13] = R.drawable.black_letter_n;
+        BlackLetterArray[14] = R.drawable.black_letter_o;
+        BlackLetterArray[15] = R.drawable.black_letter_p;
+        BlackLetterArray[16] = R.drawable.black_letter_q;
+        BlackLetterArray[17] = R.drawable.black_letter_r;
+        BlackLetterArray[18] = R.drawable.black_letter_s;
+        BlackLetterArray[19] = R.drawable.black_letter_t;
+        BlackLetterArray[20] = R.drawable.black_letter_u;
+        BlackLetterArray[21] = R.drawable.black_letter_v;
+        BlackLetterArray[22] = R.drawable.black_letter_w;
+        BlackLetterArray[23] = R.drawable.black_letter_x;
+        BlackLetterArray[24] = R.drawable.black_letter_y;
+        BlackLetterArray[25] = R.drawable.black_letter_z;
+
+        BlackNumberArray[0] = R.drawable.black_letter_0;
+        BlackNumberArray[1] = R.drawable.black_letter_1;
+        BlackNumberArray[2] = R.drawable.black_letter_2;
+        BlackNumberArray[3] = R.drawable.black_letter_3;
+        BlackNumberArray[4] = R.drawable.black_letter_4;
+        BlackNumberArray[5] = R.drawable.black_letter_5;
+        BlackNumberArray[6] = R.drawable.black_letter_6;
+        BlackNumberArray[7] = R.drawable.black_letter_7;
+        BlackNumberArray[8] = R.drawable.black_letter_8;
+        BlackNumberArray[9] = R.drawable.black_letter_9;
+
 
     }
 
@@ -181,6 +222,38 @@ public class LetterImageManager {
         return img;
     }
 
+    public int getBlackResId (char c) {
+        int img_code = (int) c;
+        if (img_code >= int_a && img_code <= int_z) {
+            return (BlackLetterArray[img_code - int_a]);
+        } else if (img_code >= int_0 && img_code <= int_9) {
+            return (BlackNumberArray[img_code - int_0]);
+        } else {
+            return (R.drawable.bad_input);
+        }
+    }
+
+    public int getRedResId (char c) {
+        int img_code = (int) c;
+        if (img_code >= int_a && img_code <= int_z) {
+            return (LetterArray[img_code - int_a]);
+        } else if (img_code >= int_0 && img_code <= int_9) {
+            return (NumberArray[img_code - int_0]);
+        } else {
+            return (R.drawable.bad_input);
+        }
+    }
+
+    public int getHintResId (char c) {
+        int img_code = (int) c;
+        if (img_code >= int_a && img_code <= int_z) {
+            return (HintLetterArray[img_code - int_a]);
+        } else if (img_code >= int_0 && img_code <= int_9) {
+            return (HintNumberArray[img_code - int_0]);
+        } else {
+            return (R.drawable.bad_input);
+        }
+    }
 
     // Given a string, it gets the images for each letter and populates the passed-in LinearLayout
     public LinearLayout get_image_for_word(String guess, HintManager guessmngr, LinearLayout ll, Context myctxt) {
@@ -208,8 +281,8 @@ public class LetterImageManager {
 
     public static LinearLayout.LayoutParams getLayoutParams () {
         LinearLayout.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        img_layout.height = 60;
-        img_layout.width = 60;
+        img_layout.height = GameEnvironment.phoneDims[0] / 15;
+        img_layout.width = GameEnvironment.phoneDims[0] / 15;
         img_layout.setMargins(0,0, 2, 10);
         return img_layout;
     }

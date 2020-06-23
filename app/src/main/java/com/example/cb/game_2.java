@@ -1,7 +1,9 @@
 package com.example.cb;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +14,12 @@ public class game_2 extends AppCompatActivity {
 
     public Context myappctxt;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_game_2);
         Button play_btn = (Button) findViewById(R.id.play_btn);
         final Button options_btn = (Button) findViewById(R.id.option_btn);

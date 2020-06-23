@@ -20,12 +20,14 @@ public class GuessHistory {
     ScrollView scrollBox;
     ListView listBox;
     List<String> List_file;
+    List<Guess> historyList;
     ArrayAdapter<String> listAdapter;
     Context appcontext;
     int [] id_array;
 
     GuessHistory() {
         List_file = new ArrayList<String>();
+        historyList = new ArrayList<Guess>();
     }
 
 
@@ -35,9 +37,6 @@ public class GuessHistory {
 
         appcontext = ctxt;
         listBox = lbox;
-
-        // List_file.add(0, "Entry1");
-        // List_file.add(0, "Entry2");
 
         listAdapter = new ArrayAdapter<String>(appcontext, android.R.layout.simple_list_item_1, List_file);
         listBox.setAdapter(listAdapter);
@@ -142,7 +141,7 @@ public class GuessHistory {
 
     }
 
-    public LinearLayout get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
+    public int[] get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
         int[] result = wgen.evaluateGuess(guess);
         int cow = result[1];
         int bull = result[2];
@@ -155,7 +154,7 @@ public class GuessHistory {
             mult_animal_img(bull, R.drawable.bulls_head, cb_eval, myctxt);
             mult_animal_img(cow, R.drawable.cow_head, cb_eval, myctxt);
         }
-        return cb_eval;
+        return result;
     }
 
 
@@ -258,6 +257,10 @@ public class GuessHistory {
             animal_img.setImageResource(img_id);
             layout.addView(animal_img);
         }
+    }
+
+    public void addToHistoryList (String word, int cows, int bulls) {
+        historyList.add(new Guess(word, cows, bulls));
     }
 
 

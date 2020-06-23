@@ -42,7 +42,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
-                app:srcCompat="@drawable/letter_q" />
+                app:srcCompat="@drawable/gray_letter_q" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@id/imageView1"
-                app:srcCompat="@drawable/letter_w" />
+                app:srcCompat="@drawable/gray_letter_w" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -66,7 +66,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView2"
-                app:srcCompat="@drawable/letter_e" />
+                app:srcCompat="@drawable/gray_letter_e" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView3"
-                app:srcCompat="@drawable/letter_r" />
+                app:srcCompat="@drawable/gray_letter_r" />
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -90,7 +90,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView4"
-                app:srcCompat="@drawable/letter_t" />
+                app:srcCompat="@drawable/gray_letter_t" />
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -102,7 +102,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView5"
-                app:srcCompat="@drawable/letter_y" />
+                app:srcCompat="@drawable/gray_letter_y" />
 
             <ImageView
                 android:id="@+id/imageView7"
@@ -114,7 +114,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView6"
-                app:srcCompat="@drawable/letter_u" />
+                app:srcCompat="@drawable/gray_letter_u" />
 
             <ImageView
                 android:id="@+id/imageView8"
@@ -126,7 +126,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView7"
-                app:srcCompat="@drawable/letter_i" />
+                app:srcCompat="@drawable/gray_letter_i" />
 
             <ImageView
                 android:id="@+id/imageView9"
@@ -138,7 +138,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView8"
-                app:srcCompat="@drawable/letter_o" />
+                app:srcCompat="@drawable/gray_letter_o" />
 
             <ImageView
                 android:id="@+id/imageView10"
@@ -150,7 +150,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView9"
-                app:srcCompat="@drawable/letter_p" />
+                app:srcCompat="@drawable/gray_letter_p" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="42dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
-                app:srcCompat="@drawable/letter_a" />
+                app:srcCompat="@drawable/gray_letter_a" />
 
             <ImageView
                 android:id="@+id/imageView12"
@@ -180,7 +180,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_toRightOf="@+id/imageView11"
-                app:srcCompat="@drawable/letter_s" />
+                app:srcCompat="@drawable/gray_letter_s" />
 
             <ImageView
                 android:id="@+id/imageView13"
@@ -192,7 +192,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView12"
-                app:srcCompat="@drawable/letter_d" />
+                app:srcCompat="@drawable/gray_letter_d" />
 
             <ImageView
                 android:id="@+id/imageView14"
@@ -204,7 +204,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView13"
-                app:srcCompat="@drawable/letter_f" />
+                app:srcCompat="@drawable/gray_letter_f" />
 
             <ImageView
                 android:id="@+id/imageView15"
@@ -216,7 +216,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView14"
-                app:srcCompat="@drawable/letter_g" />
+                app:srcCompat="@drawable/gray_letter_g" />
 
             <ImageView
                 android:id="@+id/imageView16"
@@ -228,7 +228,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView15"
-                app:srcCompat="@drawable/letter_h" />
+                app:srcCompat="@drawable/gray_letter_h" />
 
             <ImageView
                 android:id="@+id/imageView17"
@@ -240,7 +240,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView16"
-                app:srcCompat="@drawable/letter_j" />
+                app:srcCompat="@drawable/gray_letter_j" />
 
             <ImageView
                 android:id="@+id/imageView18"
@@ -252,7 +252,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView17"
-                app:srcCompat="@drawable/letter_k" />
+                app:srcCompat="@drawable/gray_letter_k" />
 
             <ImageView
                 android:id="@+id/imageView19"
@@ -264,7 +264,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView18"
-                app:srcCompat="@drawable/letter_l" />
+                app:srcCompat="@drawable/gray_letter_l" />
 
             <ImageButton
                 android:id="@+id/deleteViewBackground"
@@ -307,7 +307,7 @@
                 android:layout_toRightOf="@+id/questionImage"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
-                app:srcCompat="@drawable/letter_z" />
+                app:srcCompat="@drawable/gray_letter_z" />
 
             <ImageView
                 android:id="@+id/imageView21"
@@ -319,7 +319,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView20"
-                app:srcCompat="@drawable/letter_x" />
+                app:srcCompat="@drawable/gray_letter_x" />
 
             <ImageView
                 android:id="@+id/imageView22"
@@ -331,7 +331,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView21"
-                app:srcCompat="@drawable/letter_c" />
+                app:srcCompat="@drawable/gray_letter_c" />
 
             <ImageView
                 android:id="@+id/imageView23"
@@ -343,7 +343,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView22"
-                app:srcCompat="@drawable/letter_v" />
+                app:srcCompat="@drawable/gray_letter_v" />
 
             <ImageView
                 android:id="@+id/imageView24"
@@ -355,7 +355,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView23"
-                app:srcCompat="@drawable/letter_b" />
+                app:srcCompat="@drawable/gray_letter_b" />
 
             <ImageView
                 android:id="@+id/imageView25"
@@ -367,7 +367,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView24"
-                app:srcCompat="@drawable/letter_n" />
+                app:srcCompat="@drawable/gray_letter_n" />
 
             <ImageView
                 android:id="@+id/imageView26"
@@ -379,7 +379,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toRightOf="@+id/imageView25"
-                app:srcCompat="@drawable/letter_m" />
+                app:srcCompat="@drawable/gray_letter_m" />
 
             <ImageView
                 android:id="@+id/sendViewBackground"
@@ -429,6 +429,7 @@
         android:layout_marginTop="68dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -441,7 +442,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="51dp"
         android:layout_marginLeft="51dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="51dp"
         android:layout_marginRight="51dp"
         android:clickable="true"

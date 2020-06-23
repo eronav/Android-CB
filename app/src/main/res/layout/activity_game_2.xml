@@ -4,28 +4,150 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".game_2"
     android:background="@drawable/farm_backgnd_edited"
-    >
+    tools:context=".game_2">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/helplabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView38"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/letter_h" />
+
+        <ImageView
+            android:id="@+id/imageView39"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView38"
+            app:srcCompat="@drawable/letter_e" />
+
+        <ImageView
+            android:id="@+id/imageView40"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView39"
+            app:srcCompat="@drawable/letter_l" />
+
+        <ImageView
+            android:id="@+id/imageView41"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView40"
+            app:srcCompat="@drawable/letter_p" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/playlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintBottom_toTopOf="@id/optionlabel"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView29"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/letter_p" />
+
+        <ImageView
+            android:id="@+id/imageView30"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView29"
+            app:srcCompat="@drawable/letter_l" />
+
+        <ImageView
+            android:id="@+id/imageView28"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView30"
+            app:srcCompat="@drawable/letter_a" />
+
+        <ImageView
+            android:id="@+id/imageView31"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView28"
+            app:srcCompat="@drawable/letter_y" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/optionlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintBottom_toTopOf="@id/helplabel"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView32"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/letter_o" />
+
+        <ImageView
+            android:id="@+id/imageView33"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView32"
+            app:srcCompat="@drawable/letter_p" />
+
+        <ImageView
+            android:id="@+id/imageView34"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView33"
+            app:srcCompat="@drawable/letter_t" />
+
+        <ImageView
+            android:id="@+id/imageView35"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView34"
+            app:srcCompat="@drawable/letter_i" />
+
+        <ImageView
+            android:id="@+id/imageView36"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView35"
+            app:srcCompat="@drawable/letter_o" />
+
+        <ImageView
+            android:id="@+id/imageView37"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintLeft_toRightOf="@id/imageView36"
+            app:srcCompat="@drawable/letter_n" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="69dp"
-        android:layout_marginLeft="69dp"
         android:layout_marginTop="72dp"
-        android:layout_marginEnd="69dp"
-        android:layout_marginRight="69dp"
         android:text="Cows and Bulls"
         android:textColor="#040000"
         android:textSize="40sp"
         android:textStyle="bold"
         app:fontFamily="@font/cantora_one"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/play_btn"

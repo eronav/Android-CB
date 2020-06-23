@@ -27,8 +27,8 @@ public class GuessInputBox {
             ImageView v = new ImageView(appctxt);
             LinearLayout.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             v.setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
-            img_layout.height = 120;
-            img_layout.width = 120;
+            img_layout.height = GameEnvironment.phoneDims[0] / 9;
+            img_layout.width = GameEnvironment.phoneDims[0] / 9;
             img_layout.setMargins(0,0,8,0);
             v.setLayoutParams(img_layout);
             v.setClickable(true);
