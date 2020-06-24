@@ -35,6 +35,7 @@ public class play_game_level extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(3);
                 Intent startIntent = new Intent(getApplicationContext(), game_screen.class);
                 startIntent.putExtra("com.mailronav.cb.three", "");
                 startActivity(startIntent);
@@ -43,6 +44,7 @@ public class play_game_level extends AppCompatActivity {
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(4);
                 Intent startIntent = new Intent(getApplicationContext(), game_screen.class);
                 startIntent.putExtra("com.mailronav.cb.four", "");
                 startActivity(startIntent);
@@ -51,6 +53,7 @@ public class play_game_level extends AppCompatActivity {
         btn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(5);
                 Intent startIntent = new Intent(getApplicationContext(), game_screen.class);
                 startIntent.putExtra("com.mailronav.cb.five", "");
                 startActivity(startIntent);
@@ -59,6 +62,7 @@ public class play_game_level extends AppCompatActivity {
         btn6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(6);
                 Intent startIntent = new Intent(getApplicationContext(), game_screen.class);
                 startIntent.putExtra("com.mailronav.cb.six", "");
                 startActivity(startIntent);

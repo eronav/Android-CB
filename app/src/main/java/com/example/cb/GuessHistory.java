@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +23,31 @@ public class GuessHistory {
     List<String> List_file;
     List<Guess> historyList;
     ArrayAdapter<String> listAdapter;
-    Context appcontext;
-    int [] id_array;
+    AppCompatActivity appcontext;
 
-    GuessHistory() {
+    private ScrollView histbox;
+    private LinearLayout row;
+
+
+    GuessHistory(AppCompatActivity appcontext) {
+
+        this.appcontext = appcontext;
+
         List_file = new ArrayList<String>();
         historyList = new ArrayList<Guess>();
+
+        // This LinearLayout is the layout organizer for the ScrollView, histbox
+        // TBD: See if we can do this in XML and then remove from there
+        row = new LinearLayout(appcontext);
+        row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        row.setOrientation(LinearLayout.VERTICAL);
+
+        histbox = appcontext.findViewById(R.id.history);
+        histbox.addView(row);
     }
 
 
-    public void CreateListView(Context ctxt, ListView lbox) {
+    public void CreateListView(AppCompatActivity ctxt, ListView lbox) {
         //List_file.add("Apple");
         //Create an adapter for the listView and add the ArrayList to the adapter.
 
@@ -52,7 +68,7 @@ public class GuessHistory {
         });
     }
 
-    public LinearLayout AddEntry(WordGenerator wgen, String guess, LinearLayout guess_pict, Context myctxt) {
+    public LinearLayout AddEntry_old(WordGenerator wgen, String guess, LinearLayout guess_pict, Context myctxt) {
         String errmsg;
         int[] result;
         int attempts = List_file.size() + 1;
@@ -141,23 +157,41 @@ public class GuessHistory {
 
     }
 
-    public int[] get_img_cb_eval(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
-        int[] result = wgen.evaluateGuess(guess);
+    public void AddEntry(String guess, int[] result, boolean restore) {
+
+        LinearLayout word_and_eval_layout = new LinearLayout(appcontext);
+
+        // Fill out a layout with the guess
+        GameEnvironment.ltrmngr.get_image_for_word(guess, GameEnvironment.guessmngr, word_and_eval_layout, appcontext);
+
+        // Add some spacing
+        ImageView word_eval_spacing = new ImageView(appcontext);
+        word_eval_spacing.setLayoutParams(LetterImageManager.getLayoutParams());
+        word_and_eval_layout.addView(word_eval_spacing);
+
+        // Evaluate the result
+        get_img_cb_eval(guess, result, appcontext, GameEnvironment.ltrmngr, GameEnvironment.diff, word_and_eval_layout);
+
+        // Add a new row to the guess history box
+        row.addView(word_and_eval_layout, 0);
+
+        if (!restore)
+            addToHistoryList(guess, result[0], result[1]);
+    }
+
+    public void get_img_cb_eval(String guess, int[] result, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
         int cow = result[1];
         int bull = result[2];
 
         if(bull == diff) {
-            mult_animal_img(1, R.drawable.firework, cb_eval, myctxt);
+            fill_layout_with_eval_img(1, R.drawable.firework, cb_eval);
         } else if(cow == 0 && bull == 0) {
-            mult_animal_img(1, R.drawable.bomb, cb_eval, myctxt);
+            fill_layout_with_eval_img(1, R.drawable.bomb, cb_eval);
         } else {
-            mult_animal_img(bull, R.drawable.bulls_head, cb_eval, myctxt);
-            mult_animal_img(cow, R.drawable.cow_head, cb_eval, myctxt);
+            fill_layout_with_eval_img(bull, R.drawable.bulls_head, cb_eval);
+            fill_layout_with_eval_img(cow, R.drawable.cow_head, cb_eval);
         }
-        return result;
     }
-
-
 
     public LinearLayout get_img_cb_eval_numeric(String guess, WordGenerator wgen, Context myctxt, LetterImageManager ltrmngr, int diff) {
         int[] result = wgen.evaluateGuess(guess);
@@ -249,9 +283,10 @@ public class GuessHistory {
         }
     }
 
-    public void mult_animal_img(int count, @DrawableRes int img_id, LinearLayout layout, Context myctxt) {
+    // Fills the provided LinearLayout with the specified image up to count times
+    public void fill_layout_with_eval_img(int count, @DrawableRes int img_id, LinearLayout layout) {
         for (int i = 0; i < count; i++) {
-            ImageView animal_img = new ImageView(myctxt);
+            ImageView animal_img = new ImageView(appcontext);
             animal_img.setLayoutParams(LetterImageManager.getLayoutParams());
             // animal_img.setBackgroundDrawable(new Border(0xffff0000, 50));
             animal_img.setImageResource(img_id);
@@ -259,10 +294,16 @@ public class GuessHistory {
         }
     }
 
+    public LinearLayout restoreHistory () {
+        // TBD: Do I need to clear up contents of the previous row
+        for ( Guess guess: historyList) {
+            AddEntry(guess.getWord(), guess.getEval(), true);
+        }
+        return row;
+    }
+
     public void addToHistoryList (String word, int cows, int bulls) {
         historyList.add(new Guess(word, cows, bulls));
     }
-
-
 
 }

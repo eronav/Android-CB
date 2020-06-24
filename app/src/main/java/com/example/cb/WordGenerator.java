@@ -53,14 +53,12 @@ public class WordGenerator {
         return goal;
     }
 
-    public int getHint (String word, boolean[] posArray, int diff, boolean[] hintArray) {
+    public int getHint (String word, boolean[] posArray, int diff) {
         Random myrand = new Random();
         int randIdx = myrand.nextInt(diff);
         while (posArray[randIdx] == true) {
             randIdx = myrand.nextInt(diff);
         }
-        posArray[randIdx] = true;
-        hintArray[randIdx] = true;
         char randChr = word.charAt(randIdx);
         return (randIdx << 8) | ((int) randChr);
     }

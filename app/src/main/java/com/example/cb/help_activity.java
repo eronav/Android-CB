@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class help_activity extends AppCompatActivity {
 
+    String intent;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +25,22 @@ public class help_activity extends AppCompatActivity {
         Button next = findViewById(R.id.next);
         Button prev = findViewById(R.id.prev);
 
-        if (getIntent().hasExtra("com.mailronav.cb.A")){
+        intent = "";
 
+        if (getIntent().hasExtra("com.mailronav.cb.A")){
+            intent = "game_2";
         }
         if (getIntent().hasExtra("com.mailronav.cb.Help")) {
-
+            intent = "game_screen";
         }
         bck_btn_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), game_2.class);
+                Intent startIntent;
+                if (intent.equals("game_2"))
+                    startIntent = new Intent(getApplicationContext(), game_2.class);
+                else
+                    startIntent = new Intent(getApplicationContext(), game_screen.class);
                 startIntent.putExtra("com.mailronav.cb.help", "");
                 startActivity(startIntent);
             }
