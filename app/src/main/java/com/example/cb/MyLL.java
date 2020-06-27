@@ -58,12 +58,12 @@ public class MyLL extends LinearLayout {
         } else {
             try {
                 if (KeyEvent.KEYCODE_A <= keyCode && keyCode <= KeyEvent.KEYCODE_Z) {
-                    chr_keycode = ltrmngr.get_imgres_for_key(keyCode);
+                    chr_keycode = ltrmngr.get_imgresid_for_char(keyCode);
                     img.setImageResource(chr_keycode);
                     guess_box.addView(img);
                     guess += String.valueOf((char) (keyCode + (int) 'a' - KeyEvent.KEYCODE_A));
                 } else if (KeyEvent.KEYCODE_0 <= keyCode && keyCode <= KeyEvent.KEYCODE_9) {
-                    chr_keycode = ltrmngr.get_imgres_for_key(keyCode);
+                    chr_keycode = ltrmngr.get_imgresid_for_char(keyCode);
                     img.setImageResource(chr_keycode);
                     guess_box.addView(img);
                     guess += String.valueOf((char) (keyCode + (int) '0' - KeyEvent.KEYCODE_0));

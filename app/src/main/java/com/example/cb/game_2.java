@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,10 +21,15 @@ public class game_2 extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_game_2);
-        Button play_btn = (Button) findViewById(R.id.play_btn);
-        final Button options_btn = (Button) findViewById(R.id.option_btn);
-        Button help_btn = (Button) findViewById(R.id.help_btn);
         myappctxt = getApplicationContext();
+
+        TextView playView = (TextView) findViewById(R.id.playView);
+        TextView helpView = (TextView) findViewById(R.id.helpView);
+        TextView optionsView = (TextView) findViewById(R.id.optionsView);
+
+        playView.setClickable(true);
+        helpView.setClickable(true);
+        optionsView.setClickable(true);
 
         if(getIntent().hasExtra("com.mailronav.cb.DUDE")){
 
@@ -45,8 +50,7 @@ public class game_2 extends AppCompatActivity {
         GameEnvironment.ups = new UserPrefs();
         GameEnvironment.musicman = new MusicManager(myappctxt);
 
-
-        play_btn.setOnClickListener(new View.OnClickListener() {
+        playView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), play_game_level.class);
@@ -54,7 +58,7 @@ public class game_2 extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        options_btn.setOnClickListener(new View.OnClickListener() {
+        optionsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), options_activity.class);
@@ -62,7 +66,7 @@ public class game_2 extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        help_btn.setOnClickListener(new View.OnClickListener() {
+        helpView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), help_activity.class);

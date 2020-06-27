@@ -7,18 +7,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DoneButton implements View.OnClickListener {
 
-    AppCompatActivity activity;
     private ImageView submitImage;
     private ImageView submitImageBackground;
     private int count = 0;
 
+    DoneButton(AppCompatActivity activity) {
+
+        submitImage = activity.findViewById(R.id.sendView);
+        submitImage.setClickable(true);
+        submitImage.setOnClickListener(this);
+
+        submitImageBackground = activity.findViewById(R.id.sendViewBackground);
+        submitImageBackground.setClickable(true);
+        submitImageBackground.setOnClickListener(this);
+    }
+
     public void openDialog(int count) {
         EndGameDialogue endGameDialogue = new EndGameDialogue(count);
-        endGameDialogue.show(activity.getSupportFragmentManager(), "end game dialogue");
+        endGameDialogue.show(GameEnvironment.main_game.getSupportFragmentManager(), "end game dialogue");
     }
 
     public void done_btn_logic() {
-        HintManager guessmngr = GameEnvironment.guessmngr;
+        GuessManager guessmngr = GameEnvironment.guessmngr;
         GuessHistory ghist = GameEnvironment.guesshistmngr;
         KeyboardManager keybdmngr = GameEnvironment.keymgr;
         LetterImageManager ltrmngr = GameEnvironment.ltrmngr;
@@ -78,17 +88,5 @@ public class DoneButton implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         done_btn_logic();
-    }
-
-    DoneButton(AppCompatActivity activity) {
-        this.activity = activity;
-
-        submitImage = this.activity.findViewById(R.id.sendView);
-        submitImage.setClickable(true);
-        submitImage.setOnClickListener(this);
-
-        submitImageBackground = this.activity.findViewById(R.id.sendViewBackground);
-        submitImageBackground.setClickable(true);
-        submitImageBackground.setOnClickListener(this);
     }
 }

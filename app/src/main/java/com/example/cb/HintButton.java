@@ -2,24 +2,32 @@ package com.example.cb;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class HintButton implements View.OnLongClickListener {
 
     private boolean hintPressed = false;
     private int diff;
-    private Context myctxt;
+    private ImageView hintImage;
 
-    public HintButton (int diff, Context myctxt) {
+    public HintButton (int diff, AppCompatActivity activity) {
         this.diff = diff;
-        this.myctxt = myctxt;
+
+        hintImage = activity.findViewById(R.id.questionImage);
+        hintImage.setClickable(true);
+        hintImage.setOnLongClickListener(this);
     }
 
     public void hint_logic() {
         hintPressed = true;
         boolean[] filledPos = new boolean[diff];
+        Context appctxt = GameEnvironment.main_game.getApplicationContext();
 
         GameEnvironment.guessmngr.getAllPositions(filledPos);
+
 
         int filledCount = 0;
         for (int i = 0; i < diff; i++) {
@@ -29,7 +37,7 @@ public class HintButton implements View.OnLongClickListener {
         }
 
         if (filledCount == diff) {
-            Toast.makeText(myctxt, "No hint position available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(appctxt, "No hint position available", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -43,7 +51,7 @@ public class HintButton implements View.OnLongClickListener {
             GameEnvironment.gbox.removeBorderAt(pos);
             GameEnvironment.hintCount--;
         } else {
-            Toast.makeText(myctxt, "No more hints", Toast.LENGTH_SHORT).show();
+            Toast.makeText(appctxt, "No more hints", Toast.LENGTH_SHORT).show();
         }
     }
 

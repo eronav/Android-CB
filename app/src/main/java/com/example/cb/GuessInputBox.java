@@ -1,30 +1,38 @@
 package com.example.cb;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Arrays;
 
 public class GuessInputBox {
     private int diff;
-    private Context appctxt;
-    private LinearLayout thebox;
+    private LinearLayout guess_box;
     private ImageView[] boxViews;
     private int userSelectedBoxPosition = 7;
 
-    GuessInputBox(Context appctxt, View v, int diff) {
+    GuessInputBox(AppCompatActivity activity, int diff) {
         this.diff = diff;
-        this.appctxt = appctxt;
-        thebox = (LinearLayout) v;
+
+        // Initialize the input box
+        guess_box = activity.findViewById(R.id.guess_box);
+        guess_box.setFocusable(true);
+        guess_box.setFocusableInTouchMode(true);
+        guess_box.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     public void build_guess_box () {
+        Context ctxt = GameEnvironment.main_game.getApplicationContext();
+
         boxViews = new ImageView[diff];
         for (int i = 0; i < diff; i++) {
-            ImageView v = new ImageView(appctxt);
+            ImageView v = new ImageView(ctxt);
             LinearLayout.LayoutParams img_layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             v.setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
             img_layout.height = GameEnvironment.phoneDims[0] / 9;
@@ -42,10 +50,11 @@ public class GuessInputBox {
                             break;
                         }
                     }
-                    Toast.makeText(appctxt, String.valueOf(i), Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(GameEnvironment.main_game.getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
                 }
             });
-            thebox.addView(v);
+            guess_box.addView(v);
             boxViews[i] = v;
         }
     }
@@ -59,7 +68,7 @@ public class GuessInputBox {
     }
 
     public void reset_guess_box(boolean rebuild) {
-        thebox.removeAllViews();
+        guess_box.removeAllViews();
         Arrays.fill(boxViews, null);
         if (rebuild)
             build_guess_box();
@@ -67,17 +76,17 @@ public class GuessInputBox {
 
     public void setImageAt(int pos, int img_resid) {
         if (pos < diff) {
-            ImageView img = (ImageView) thebox.getChildAt(pos);
+            ImageView img = (ImageView) guess_box.getChildAt(pos);
             img.setImageResource(img_resid);
         }
     }
 
     public void removeBorderAt(int pos) {
-        thebox.getChildAt(pos).setBackgroundDrawable(null);
+        guess_box.getChildAt(pos).setBackgroundDrawable(null);
     }
 
     public void setBorderAt(int pos) {
-        thebox.getChildAt(pos).setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
+        guess_box.getChildAt(pos).setBackgroundDrawable(new Border(R.color.hintColorGame, 10));
     }
 
     public void deleteImageAt(int pos) {
@@ -85,18 +94,32 @@ public class GuessInputBox {
         int num_child = 0;
 
         try {
-            num_child = thebox.getChildCount();
+            num_child = guess_box.getChildCount();
         } catch (Exception e){
             e.printStackTrace();
         }
 
         if (abs_pos < num_child) {
             if (pos < 0) {
-                ImageView img = (ImageView) thebox.getChildAt(num_child - abs_pos);
+                ImageView img = (ImageView) guess_box.getChildAt(num_child - abs_pos);
                 img.setImageResource(0);
             } else {
-                ImageView img = (ImageView) thebox.getChildAt(pos);
+                ImageView img = (ImageView) guess_box.getChildAt(pos);
                 img.setImageResource(0);
+            }
+        }
+    }
+
+    public void reinitView () {
+        char[] c = {' '};
+        LetterImageManager ltrmngr = GameEnvironment.ltrmngr;
+        for (int i = 0; i < diff; i++) {
+            if (GameEnvironment.guessmngr.getCharAt(i, c)) {
+                removeBorderAt(i);
+                setImageAt(i, ltrmngr.get_imgresid_for_char(ltrmngr.getKeycodeFromChar(c[0])));
+            } else if (GameEnvironment.guessmngr.getHintAt(i, c)) {
+                removeBorderAt(i);
+                setImageAt(i, ltrmngr.get_imgresid_for_hint(ltrmngr.getKeycodeFromChar(c[0])));
             }
         }
     }
@@ -109,5 +132,4 @@ public class GuessInputBox {
         }
         return 0;
     }
-
 }

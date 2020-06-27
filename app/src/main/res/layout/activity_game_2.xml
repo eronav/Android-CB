@@ -7,132 +7,6 @@
     android:background="@drawable/farm_backgnd_edited"
     tools:context=".game_2">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/helplabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView38"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/letter_h" />
-
-        <ImageView
-            android:id="@+id/imageView39"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView38"
-            app:srcCompat="@drawable/letter_e" />
-
-        <ImageView
-            android:id="@+id/imageView40"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView39"
-            app:srcCompat="@drawable/letter_l" />
-
-        <ImageView
-            android:id="@+id/imageView41"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView40"
-            app:srcCompat="@drawable/letter_p" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/playlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        app:layout_constraintBottom_toTopOf="@id/optionlabel"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView29"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/letter_p" />
-
-        <ImageView
-            android:id="@+id/imageView30"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView29"
-            app:srcCompat="@drawable/letter_l" />
-
-        <ImageView
-            android:id="@+id/imageView28"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView30"
-            app:srcCompat="@drawable/letter_a" />
-
-        <ImageView
-            android:id="@+id/imageView31"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView28"
-            app:srcCompat="@drawable/letter_y" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/optionlabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        app:layout_constraintBottom_toTopOf="@id/helplabel"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView32"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/letter_o" />
-
-        <ImageView
-            android:id="@+id/imageView33"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView32"
-            app:srcCompat="@drawable/letter_p" />
-
-        <ImageView
-            android:id="@+id/imageView34"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView33"
-            app:srcCompat="@drawable/letter_t" />
-
-        <ImageView
-            android:id="@+id/imageView35"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView34"
-            app:srcCompat="@drawable/letter_i" />
-
-        <ImageView
-            android:id="@+id/imageView36"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView35"
-            app:srcCompat="@drawable/letter_o" />
-
-        <ImageView
-            android:id="@+id/imageView37"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintLeft_toRightOf="@id/imageView36"
-            app:srcCompat="@drawable/letter_n" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -149,56 +23,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Button
-        android:id="@+id/play_btn"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:orientation="vertical"
-        android:shadowColor="#00FFFFFF"
-        android:text="Play"
-        android:textColor="#121111"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.819"
-        tools:visibility="visible" />
-
-    <Button
-        android:id="@+id/help_btn"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:text="Help"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.678"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.901" />
-
-    <Button
-        android:id="@+id/option_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:text="Options"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.283"
-        app:layout_constraintStart_toEndOf="@+id/play_btn"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.819" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="244dp"
@@ -206,10 +30,58 @@
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.79"
+        app:layout_constraintHorizontal_bias="0.904"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.924"
+        app:layout_constraintVertical_bias="0.949"
         app:srcCompat="@drawable/hay3" />
+
+    <TextView
+        android:id="@+id/playView"
+        android:layout_width="61dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="176dp"
+        android:background="@drawable/background"
+        android:paddingLeft="10dp"
+        android:text="Play"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/helpView"
+        android:layout_width="62dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background"
+        android:paddingLeft="10dp"
+        android:text="Help"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/optionsView" />
+
+    <TextView
+        android:id="@+id/optionsView"
+        android:layout_width="93dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background"
+        android:paddingLeft="10dp"
+        android:text="Options"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

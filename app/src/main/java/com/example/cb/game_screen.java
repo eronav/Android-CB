@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +33,7 @@ public class game_screen extends AppCompatActivity{
     Random myrand;
     WordGenerator wgen;
     UserPrefs ups;
-    HintManager guessmngr;
+    GuessManager guessmngr;
     GuessHistory ghist;
     LetterImageManager ltrmngr;
     KeyboardManager keymngr;
@@ -53,20 +52,14 @@ public class game_screen extends AppCompatActivity{
     public ImageView deleteImageBackground;
 
 
-    public ImageView hintImage;
-
-
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //Create the list View
-
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         setContentView(R.layout.activity_game_screen);
+
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         GameEnvironment.main_game = this;
 
@@ -86,8 +79,16 @@ public class game_screen extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         if (getIntent().hasExtra("com.mailronav.cb.help")) {
+
+            GameEnvironment.gbox = new GuessInputBox(this, GameEnvironment.diff);
+            GameEnvironment.gbox.build_guess_box();
+            GameEnvironment.keymgr.initialize_keyboard(this);
+
+            GameEnvironment.guesshistmngr.reinitView(this);
+            GameEnvironment.gbox.reinitView();
+            GameEnvironment.guesshistmngr.restoreHistory();
+
             InitLocalEnvironment();
-            ghist.restoreHistory(); // ghist is null
         } else {
             if(getIntent().hasExtra("com.mailronav.cb.three")){
                 diff = 3;
@@ -117,10 +118,11 @@ public class game_screen extends AppCompatActivity{
         shadow_guess_box.requestFocus();
          */
 
-        // Get a new target word
+        diff = GameEnvironment.diff;
         word = GameEnvironment.word;
 
     } // onCreate()
+
 
     public void play_again_logic () {
         GameEnvironment.SetGameOver(false);
@@ -163,8 +165,8 @@ public class game_screen extends AppCompatActivity{
         } else {
             ////////////////////// we have a number or an alphabet eeeeoooooeeeee!
             int img_resid = 0;
-            char c = KSM.getCharForKeycode(keyCode, event);
-            img_resid = ltrmngr.get_imgres_for_key(keyCode);
+            char c = ltrmngr.getCharForKeycode(keyCode);
+            img_resid = ltrmngr.get_imgresid_for_char(keyCode);
 
             if (!GameEnvironment.IsGameOver()) {
                 if (c != ' ') { // GOTCHA, a valid character
@@ -267,47 +269,35 @@ public class game_screen extends AppCompatActivity{
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        DeleteActivityObjects();
+        super.onDestroy();
+    }
+
+
     private void InitEnvironment() {
         GameEnvironment.wgen = new WordGenerator(myctxt, diff);
         GameEnvironment.ltrmngr = new LetterImageManager();
-        GameEnvironment.guessmngr = new HintManager(diff);
+        GameEnvironment.guessmngr = new GuessManager(diff);
         GameEnvironment.word = GameEnvironment.wgen.getWord();
-        GameEnvironment.keymgr = new KeyboardManager(this);
+        GameEnvironment.keymgr = new KeyboardManager();
         GameEnvironment.guesshistmngr = new GuessHistory(this);
+
+        GameEnvironment.gbox = new GuessInputBox(this, diff);
 
         GameEnvironment.phoneDims = new int[2];
         GameEnvironment.phoneDims = getWindowDims(myappctxt);
-
-        GameEnvironment.hintCount = 3;
+        GameEnvironment.hintCount = 6;
 
         GameEnvironment.SetGameOver(false);
     }
 
     private void InitViewElements() {
 
-
-        // Make our action buttons (Delete, Submit, Hint) clickable
-        deleteImage = findViewById(R.id.deleteView);
-        deleteImage.setClickable(true);
-        deleteImageBackground = findViewById(R.id.deleteViewBackground);
-        deleteImageBackground.setClickable(true);
-
-
-        hintImage = findViewById(R.id.questionImage);
-        hintImage.setClickable(true);
-
         // Make the keyboard alphabet clickable
-        GameEnvironment.keymgr.initialize_keyboard();
+        GameEnvironment.keymgr.initialize_keyboard(this);
 
-        // Initialize the input box
-        guess_box = findViewById(R.id.guess_box);
-        guess_box.setFocusable(true);
-        guess_box.setFocusableInTouchMode(true);
-        // guess_box.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        // guess_box.setDividerPadding((int) UIUtil.convertDpToPx(myappctxt,15));
-        guess_box.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        GameEnvironment.gbox = new GuessInputBox(myappctxt, guess_box, diff);
         GameEnvironment.gbox.build_guess_box();
     }
 
@@ -324,7 +314,13 @@ public class game_screen extends AppCompatActivity{
     private void InstallClickListeners() {
 
         GameEnvironment.donebutton = new DoneButton(this);
-        GameEnvironment.hintbutton = new HintButton(diff, myappctxt);
+        GameEnvironment.hintbutton = new HintButton(GameEnvironment.diff, this);
+
+        deleteImage = findViewById(R.id.deleteView);
+        deleteImage.setClickable(true);
+        deleteImageBackground = findViewById(R.id.deleteViewBackground);
+        deleteImageBackground.setClickable(true);
+
 
         deleteImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,14 +350,12 @@ public class game_screen extends AppCompatActivity{
                 return true;
             }
         });
+    }
 
-        hintImage.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                GameEnvironment.hintbutton.hint_logic();
-                return true;
-            }
-        });
-
+    void DeleteActivityObjects() {
+        GameEnvironment.gbox.reset_guess_box(false);
+        GameEnvironment.gbox = null;
+        GameEnvironment.donebutton = null;
+        GameEnvironment.hintbutton = null;
     }
 }

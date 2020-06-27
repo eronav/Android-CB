@@ -180,12 +180,22 @@ public class LetterImageManager {
         return id_array;
     }
 
-    public int get_imgres_for_key(int keycode) {
+    public int get_imgresid_for_char(int keycode) {
         int resid = -1;
         if(KeyEvent.KEYCODE_A <= keycode && keycode <= KeyEvent.KEYCODE_Z) {
             resid = LetterArray[keycode - KeyEvent.KEYCODE_A];
         } else if(KeyEvent.KEYCODE_0 <= keycode && keycode <= KeyEvent.KEYCODE_9) {
             resid = NumberArray[keycode - KeyEvent.KEYCODE_0];
+        }
+        return resid;
+    }
+
+    public int get_imgresid_for_hint(int keycode) {
+        int resid = -1;
+        if(KeyEvent.KEYCODE_A <= keycode && keycode <= KeyEvent.KEYCODE_Z) {
+            resid = HintLetterArray[keycode - KeyEvent.KEYCODE_A];
+        } else if(KeyEvent.KEYCODE_0 <= keycode && keycode <= KeyEvent.KEYCODE_9) {
+            resid = HintNumberArray[keycode - KeyEvent.KEYCODE_0];
         }
         return resid;
     }
@@ -222,6 +232,27 @@ public class LetterImageManager {
         return img;
     }
 
+    public char getCharForKeycode (int keycode) {
+        if (KeyEvent.KEYCODE_A <= keycode && keycode <= KeyEvent.KEYCODE_Z) {
+            return (char) (keycode + (int) 'a' - KeyEvent.KEYCODE_A);
+        } else if (KeyEvent.KEYCODE_0 <= keycode && keycode <= KeyEvent.KEYCODE_9) {
+            return (char) (keycode + (int) '0' - KeyEvent.KEYCODE_0);
+        } else {
+            return ' ';
+        }
+    }
+
+
+    public int getKeycodeFromChar (char c) {
+        if (((int) c) >= int_a && ((int) c) <= int_z) {
+            return ((int) c) - int_a + KeyEvent.KEYCODE_A;
+        } else if (((int) c) >= int_0 && ((int) c) <= int_9) {
+            return ((int) c) - int_0 + KeyEvent.KEYCODE_0;
+        } else {
+            return ' ';
+        }
+    }
+
     public int getBlackResId (char c) {
         int img_code = (int) c;
         if (img_code >= int_a && img_code <= int_z) {
@@ -256,7 +287,7 @@ public class LetterImageManager {
     }
 
     // Given a string, it gets the images for each letter and populates the passed-in LinearLayout
-    public LinearLayout get_image_for_word(String guess, HintManager guessmngr, LinearLayout ll, Context myctxt) {
+    public LinearLayout get_image_for_word(String guess, GuessManager guessmngr, LinearLayout ll, Context myctxt) {
         ImageView img;
         for(int i = 0; i < guess.length(); i++) {
             // If there is a hint, use the Hint character set else use the Regular character set

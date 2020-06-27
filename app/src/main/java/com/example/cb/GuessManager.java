@@ -1,6 +1,6 @@
 package com.example.cb;
 
-public class HintManager {
+public class GuessManager {
 
     private char[] guessPos;
     private char[] hintPos;
@@ -8,7 +8,7 @@ public class HintManager {
     private static  char blank_char = '_';
     private static char EMPTY_CHAR = 0;
 
-    HintManager (int diff) {
+    GuessManager(int diff) {
         guessPos = new char[diff];
         hintPos = new char[diff];
         for (int i = 0; i < diff; i++) {
@@ -30,6 +30,17 @@ public class HintManager {
 
     public boolean hasCharAt (int pos) {
         return (guessPos[pos] != EMPTY_CHAR);
+    }
+
+    public boolean getCharAt (int pos, char[] c) {
+        c[0] = guessPos[pos];
+        return (guessPos[pos] != EMPTY_CHAR);
+    }
+
+
+    public boolean getHintAt (int pos, char[] c) {
+        c[0] = hintPos[pos];
+        return (hintPos[pos] != EMPTY_CHAR);
     }
 
     public boolean hasHintAt (int pos) {
@@ -100,10 +111,6 @@ public class HintManager {
         hintPos[pos] = EMPTY_CHAR;
     }
 
-    public char getLetter (int pos) {
-        return (hasCharAt(pos) ? guessPos[pos] : blank_char);
-    }
-
     public int delLast() {
         for (int i = diff-1; i >= 0 ; i--) {
             if (hasCharAt(i)) {
@@ -153,33 +160,14 @@ public class HintManager {
         return -1;
     }
 
-    public String addCharsToString(String ins) {
-        String s = "";
-        for (int i=0; i < diff; i++) {
-            if (hasCharAt(i))
-                s += String.valueOf(guessPos[i]);
-            else if (i < ins.length())
-                s += String.valueOf(ins.charAt(i));
-            else
-                s += String.valueOf(blank_char);
+    public void updateHintKeyboard() {
+        for (char c: hintPos) {
+            if (c != EMPTY_CHAR) {
+                GameEnvironment.keymgr.set_hint_image(c);
+            }
         }
-
-        return s;
     }
 
-    public String addHintsToString(String ins) {
-        String s = "";
-        for (int i=0; i < diff; i++) {
-            if (hasHintAt(i))
-                s += String.valueOf(hintPos[i]);
-            else if (i < ins.length())
-                s += String.valueOf(ins.charAt(i));
-            else
-                s += String.valueOf(blank_char);
-        }
-
-        return s;
-    }
 
     public String makeString() {
         String s = "";
@@ -211,7 +199,6 @@ public class HintManager {
         }
         return num;
     }
-
     public int populate_gbox (GuessInputBox gbox, LetterImageManager lim) {
         int numhints = 0;
         for (int i=0; i < diff; i++) {
@@ -223,5 +210,4 @@ public class HintManager {
         }
         return numhints;
     }
-
 }

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,11 +18,17 @@ public class play_game_level extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_play_game_level);
-        Button btn3 = (Button) findViewById(R.id.button3);
-        Button btn4 = (Button) findViewById(R.id.button4);
-        Button btn5 = (Button) findViewById(R.id.button5);
-        Button btn6 = (Button) findViewById(R.id.button6);
+        
+        TextView view3 = findViewById(R.id.view3);
+        TextView view4 = findViewById(R.id.view4);
+        TextView view5 = findViewById(R.id.view5);
+        TextView view6 = findViewById(R.id.view6);
 
+        view3.setClickable(true);
+        view4.setClickable(true);
+        view5.setClickable(true);
+        view6.setClickable(true);
+        
         if(getIntent().hasExtra("com.mailronav.cb.YOU")){
 
         }
@@ -32,7 +38,7 @@ public class play_game_level extends AppCompatActivity {
         if(getIntent().hasExtra("com.mailronav.cb.playAgain")){
 
         }
-        btn3.setOnClickListener(new View.OnClickListener() {
+        view3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(3);
@@ -41,7 +47,7 @@ public class play_game_level extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        btn4.setOnClickListener(new View.OnClickListener() {
+        view4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(4);
@@ -50,7 +56,7 @@ public class play_game_level extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        btn5.setOnClickListener(new View.OnClickListener() {
+        view5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(5);
@@ -59,7 +65,7 @@ public class play_game_level extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        btn6.setOnClickListener(new View.OnClickListener() {
+        view6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // GameEnvironment.word = GameEnvironment.wgen.targetGenFromDict(6);

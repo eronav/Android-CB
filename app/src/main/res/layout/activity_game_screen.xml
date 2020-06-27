@@ -8,28 +8,50 @@
     android:background="@drawable/farm_backgnd_edited"
     android:inputType="textNoSuggestions|textVisiblePassword">
 
+    <LinearLayout
+        android:id="@+id/guess_box"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginRight="51dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"></LinearLayout>
+
+    <ScrollView
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="2dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        app:layout_constraintTop_toBottomOf="@+id/guess_box"
+        app:layout_constraintBottom_toTopOf="@+id/keyboardBox"
+        android:layout_height="300dp" />
+
+
     <FrameLayout
         android:id="@+id/keyboardBox"
-        android:layout_width="392dp"
-        android:layout_height="133dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent"><![CDATA[
-
-
-
-            />
-
-
-
-
-        ]]>
+        app:layout_constraintTop_toBottomOf="@id/history">
 
         <RelativeLayout
             android:id="@+id/qwertyRow"
             android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_height="32dp">
 
             <ImageView
@@ -157,7 +179,8 @@
             android:id="@+id/asdfghRow"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:layout_marginTop="32dp">
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@id/qwertyRow">
 
             <ImageView
                 android:id="@+id/imageView11"
@@ -287,26 +310,23 @@
                 android:tint="#FFFFFF"
                 app:srcCompat="@android:drawable/ic_input_delete" />
         </RelativeLayout>
-        <![CDATA[
 
-            />
-
-        ]]>
 
         <RelativeLayout
             android:id="@+id/zxcvbnRow"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            android:layout_marginTop="64dp">
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@id/asdfghRow">
 
             <ImageView
                 android:id="@+id/imageView20"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/questionImage"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
+                android:layout_toRightOf="@+id/questionImage"
                 app:srcCompat="@drawable/gray_letter_z" />
 
             <ImageView
@@ -386,28 +406,28 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/imageView26"
-                android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/imageView26"
                 app:srcCompat="@drawable/light_blue_background" />
 
             <ImageView
                 android:id="@+id/sendView"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="#00FFFFFF"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/imageView26"
-                android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/imageView26"
+                android:background="#00FFFFFF"
                 app:srcCompat="@android:drawable/ic_menu_send" />
 
             <ImageView
                 android:id="@+id/questionImage"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 app:srcCompat="@drawable/light_blue_question_mark" />
@@ -420,37 +440,6 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <ScrollView
-        android:id="@+id/history"
-        android:layout_width="300dp"
-        android:layout_height="189dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/guess_box"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="51dp"
-        android:layout_marginLeft="51dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginRight="51dp"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/history"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,38 +23,47 @@ public class GuessHistory {
     List<String> List_file;
     List<Guess> historyList;
     ArrayAdapter<String> listAdapter;
-    AppCompatActivity appcontext;
 
     private ScrollView histbox;
     private LinearLayout row;
 
 
-    GuessHistory(AppCompatActivity appcontext) {
+    GuessHistory(AppCompatActivity activity) {
 
-        this.appcontext = appcontext;
+        Context appctxt = activity.getApplicationContext();
 
         List_file = new ArrayList<String>();
         historyList = new ArrayList<Guess>();
 
         // This LinearLayout is the layout organizer for the ScrollView, histbox
         // TBD: See if we can do this in XML and then remove from there
-        row = new LinearLayout(appcontext);
+        row = new LinearLayout(appctxt);
         row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         row.setOrientation(LinearLayout.VERTICAL);
 
-        histbox = appcontext.findViewById(R.id.history);
+        histbox = activity.findViewById(R.id.history);
+        histbox.addView(row);
+    }
+
+    public void reinitView(AppCompatActivity activity) {
+        Context appctxt = activity.getApplicationContext();
+
+        row = new LinearLayout(appctxt);
+        row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        row.setOrientation(LinearLayout.VERTICAL);
+
+        histbox = activity.findViewById(R.id.history);
         histbox.addView(row);
     }
 
 
-    public void CreateListView(AppCompatActivity ctxt, ListView lbox) {
+    public void CreateListView(Context ctxt, ListView lbox) {
         //List_file.add("Apple");
         //Create an adapter for the listView and add the ArrayList to the adapter.
 
-        appcontext = ctxt;
         listBox = lbox;
 
-        listAdapter = new ArrayAdapter<String>(appcontext, android.R.layout.simple_list_item_1, List_file);
+        listAdapter = new ArrayAdapter<String>(ctxt, android.R.layout.simple_list_item_1, List_file);
         listBox.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
 
@@ -159,37 +168,39 @@ public class GuessHistory {
 
     public void AddEntry(String guess, int[] result, boolean restore) {
 
-        LinearLayout word_and_eval_layout = new LinearLayout(appcontext);
+        Context appctxt = GameEnvironment.main_game.getApplicationContext();
+
+        LinearLayout word_and_eval_layout = new LinearLayout(appctxt);
 
         // Fill out a layout with the guess
-        GameEnvironment.ltrmngr.get_image_for_word(guess, GameEnvironment.guessmngr, word_and_eval_layout, appcontext);
+        GameEnvironment.ltrmngr.get_image_for_word(guess, GameEnvironment.guessmngr, word_and_eval_layout, appctxt);
 
         // Add some spacing
-        ImageView word_eval_spacing = new ImageView(appcontext);
+        ImageView word_eval_spacing = new ImageView(appctxt);
         word_eval_spacing.setLayoutParams(LetterImageManager.getLayoutParams());
         word_and_eval_layout.addView(word_eval_spacing);
 
         // Evaluate the result
-        get_img_cb_eval(guess, result, appcontext, GameEnvironment.ltrmngr, GameEnvironment.diff, word_and_eval_layout);
+        get_img_cb_eval(guess, result, appctxt, GameEnvironment.ltrmngr, GameEnvironment.diff, word_and_eval_layout);
 
         // Add a new row to the guess history box
         row.addView(word_and_eval_layout, 0);
 
         if (!restore)
-            addToHistoryList(guess, result[0], result[1]);
+            addToHistoryList(guess, result[1], result[2]);
     }
 
-    public void get_img_cb_eval(String guess, int[] result, Context myctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
+    public void get_img_cb_eval(String guess, int[] result, Context appctxt, LetterImageManager ltrmngr, int diff, LinearLayout cb_eval) {
         int cow = result[1];
         int bull = result[2];
 
         if(bull == diff) {
-            fill_layout_with_eval_img(1, R.drawable.firework, cb_eval);
+            fill_layout_with_eval_img(appctxt, 1, R.drawable.firework, cb_eval);
         } else if(cow == 0 && bull == 0) {
-            fill_layout_with_eval_img(1, R.drawable.bomb, cb_eval);
+            fill_layout_with_eval_img(appctxt, 1, R.drawable.bomb, cb_eval);
         } else {
-            fill_layout_with_eval_img(bull, R.drawable.bulls_head, cb_eval);
-            fill_layout_with_eval_img(cow, R.drawable.cow_head, cb_eval);
+            fill_layout_with_eval_img(appctxt, bull, R.drawable.bulls_head, cb_eval);
+            fill_layout_with_eval_img(appctxt, cow, R.drawable.cow_head, cb_eval);
         }
     }
 
@@ -284,9 +295,11 @@ public class GuessHistory {
     }
 
     // Fills the provided LinearLayout with the specified image up to count times
-    public void fill_layout_with_eval_img(int count, @DrawableRes int img_id, LinearLayout layout) {
+    public void fill_layout_with_eval_img(Context appctxt, int count, @DrawableRes int img_id, LinearLayout layout) {
+
+
         for (int i = 0; i < count; i++) {
-            ImageView animal_img = new ImageView(appcontext);
+            ImageView animal_img = new ImageView(appctxt);
             animal_img.setLayoutParams(LetterImageManager.getLayoutParams());
             // animal_img.setBackgroundDrawable(new Border(0xffff0000, 50));
             animal_img.setImageResource(img_id);
@@ -298,7 +311,9 @@ public class GuessHistory {
         // TBD: Do I need to clear up contents of the previous row
         for ( Guess guess: historyList) {
             AddEntry(guess.getWord(), guess.getEval(), true);
+            GameEnvironment.keymgr.updateKeyboard(guess.getWord(), guess.getEval());
         }
+        GameEnvironment.guessmngr.updateHintKeyboard();
         return row;
     }
 

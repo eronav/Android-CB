@@ -7,7 +7,7 @@ public class GameEnvironment {
     static public game_screen main_game;
     static public KeyboardManager keymgr;
     static public LetterImageManager ltrmngr;
-    static public HintManager guessmngr;
+    static public GuessManager guessmngr;
     static public GuessHistory guesshistmngr;
     static public GuessInputBox gbox;
 

@@ -1,22 +1,15 @@
 package com.example.cb;
 
-import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class KeyboardManager implements View.OnClickListener {
-    @Override
-    public void onClick(View v) {
-        // Handles a keystroke
-        String idString = v.getResources().getResourceEntryName(v.getId());
-        int newKeyCode = getKeyCodeFromId(idString);
-        KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
-        GameEnvironment.main_game.onKeyLogic(event, newKeyCode);
-    }
 
     private enum KeyColor {KEY_COLOR_DEFAULT, KEY_COLOR_EXISTS, KEY_COLOR_BOMB, KEY_COLOR_HINT}
     private int int_a = (int) 'a';
@@ -24,16 +17,16 @@ public class KeyboardManager implements View.OnClickListener {
     private int int_0 = (int) '0';
     private int int_9 = (int) '9';
     private Map<String, KeyColor> keystate = new HashMap<String, KeyColor>();
-    
-    private Activity activity;
 
-    KeyboardManager(Activity activity) {
-        for (int i = 97; i <= 122; i++) {
+    KeyboardManager() {
+        // setDefaultColor();
+    }
+
+    private void setDefaultColor () {
+        for (int i = int_a; i <= int_z; i++) {
             char c = (char) i;
             keystate.put(String.valueOf(c), KeyColor.KEY_COLOR_DEFAULT);
         }
-        
-        this.activity = activity;
     }
 
     public int getViewIdFromLetter (char letter) {
@@ -145,7 +138,7 @@ public class KeyboardManager implements View.OnClickListener {
         }
     }
     
-    public void initialize_keyboard () {
+    public void initialize_keyboard (AppCompatActivity activity) {
         ImageView keyboardButton1, keyboardButton2, keyboardButton3, keyboardButton4;
         ImageView keyboardButton5, keyboardButton6, keyboardButton7, keyboardButton8;
         ImageView keyboardButton9, keyboardButton10, keyboardButton11, keyboardButton12;
@@ -257,5 +250,16 @@ public class KeyboardManager implements View.OnClickListener {
         keyboardButton26 = activity.findViewById(R.id.imageView26);
         keyboardButton26.setClickable(true);
         keyboardButton26.setOnClickListener(this);
+
+        setDefaultColor();
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Handles a keystroke
+        String idString = v.getResources().getResourceEntryName(v.getId());
+        int newKeyCode = getKeyCodeFromId(idString);
+        KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP, newKeyCode);
+        GameEnvironment.main_game.onKeyLogic(event, newKeyCode);
     }
 }
